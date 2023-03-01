@@ -31,7 +31,10 @@ const Home = () => {
 						account, you'll be able to access all of the features and
 						functionality of Face Guardian.`}
 					</p>
-					<Button variant="contained" color="primary" className="bg-[#5f9cbf]">
+					<Button
+						variant="contained"
+						color="primary"
+						className="bg-[#5f9cbf] hover:bg-[#ddf3ff] hover:text-[#5f9cbf]">
 						<RocketLaunchIcon />
 						Get Started
 					</Button>
