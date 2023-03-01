@@ -1,8 +1,24 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 @import url("https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,500;0,600;0,700;1,300;1,400;1,500&display=swap");
+
+:root {
+	/* Colors */
+	--color-primary: #9fdbfd;
+	--color-primary-2: #5f9cbf;
+	--color-primary-3: #ddf3ff;
+}
 
 body {
 	font-family: "Work Sans", sans-serif;
+	margin: 0;
+	padding: 0;
+}
+
+#tsparticles-curr {
+	z-index: 0;
+	height: 100%;
+	position: absolute;
+	width: 100%;
 }
