@@ -9,7 +9,7 @@ import LockIcon from "@mui/icons-material/Lock";
 const Home = () => {
 	return (
 		<ParticleLayout title="Home">
-			<div className="flex flex-col-reverse lg:flex-row items-center justify-center gap-10 p-4 lg:p-20 z-50 w-full h-full">
+			<div className="flex flex-col lg:flex-row items-center justify-center gap-10 p-4 lg:p-20 z-50 w-full h-full">
 				<Image
 					src="/fg-logo.png"
 					alt="fg-logo"
