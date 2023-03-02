@@ -3,7 +3,6 @@ import Image from "next/image";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import Email from "@mui/icons-material/Email";
 import LockIcon from "@mui/icons-material/Lock";
 
