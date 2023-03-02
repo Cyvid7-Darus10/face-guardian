@@ -1,16 +1,24 @@
-import ParticleLayout from "../components/Layout/ParticleLayout";
+import ParticleLayout from "../../components/Layout/ParticleLayout";
 import Image from "next/image";
 import Button from "@mui/material/Button";
-import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 
-const Home = () => {
+const Intro = () => {
 	return (
-		<ParticleLayout title="Home">
-			<div className="flex flex-col-reverse lg:flex-row items-center justify-center gap-10 p-4 lg:p-20 z-50 w-full h-full">
-				<div className="flex flex-col gap-5 w-full lg:w-1/2 p-5 lg:p-10 z-50">
+		<ParticleLayout title="Intro">
+			<div className="flex flex-col items-center gap-10 w-full lg:w-1/2 p-5 lg:p-10 z-50 mx-auto">
+				<div className="flex flex-col items-center">
+					<Image
+						src="/fg-logo.png"
+						alt="fg-logo"
+						width={1000}
+						height={1000}
+						className="z-50 lg:w-[100px]"
+					/>
 					<p className="text-[35px] font-extrabold w-full text-center lg:text-left">
-						Welcome to Face Guardian!
+						Face Guardian
 					</p>
+				</div>
+				<div className="flex flex-col items-center justify-center gap-5 bg-[#ddf3ff] p-10 shadow">
 					<p className="leading-[30px] text-[20px]">
 						{`
 						We're thrilled to have you join our community. To get started,
@@ -31,26 +39,18 @@ const Home = () => {
 						account, you'll be able to access all of the features and
 						functionality of Face Guardian.`}
 					</p>
-					<Button
-						href="/register/intro"
-						variant="contained"
-						color="primary"
-						className="bg-[#5f9cbf] hover:bg-[#ddf3ff] hover:text-[#5f9cbf] w-full lg:w-1/2 m-auto">
-						<RocketLaunchIcon />
-						Get Started
-					</Button>
 				</div>
 
-				<Image
-					src="/fg-logo.png"
-					alt="fg-logo"
-					width={1000}
-					height={1000}
-					className="z-50 w-full lg:w-1/3"
-				/>
+				<Button
+					href="/register/face"
+					variant="contained"
+					color="primary"
+					className="bg-[#5f9cbf] hover:bg-[#ddf3ff] hover:text-[#5f9cbf] w-full lg:w-1/2 m-auto">
+					Next
+				</Button>
 			</div>
 		</ParticleLayout>
 	);
 };
 
-export default Home;
+export default Intro;

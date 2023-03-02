@@ -5,7 +5,7 @@ const ParticleLayout = ({ children, title }) => {
 	return (
 		<>
 			<Head>
-				<title>{title ? `${title} | ` : ""} Face Guardian</title>
+				<title>{title ? `${title} | Face Guardian` : "Face Guardian"} </title>
 			</Head>
 			<div>
 				<Particle />
