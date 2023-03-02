@@ -7,8 +7,8 @@ const Home = () => {
 	return (
 		<ParticleLayout title="Home">
 			<div className="flex flex-col-reverse lg:flex-row items-center justify-center gap-10 p-4 lg:p-20 z-50 w-full h-full">
-				<div className="flex flex-col gap-5 w-full lg:w-1/2 p-10 z-50">
-					<p className="text-[35px] font-extrabold w-full">
+				<div className="flex flex-col gap-5 w-full lg:w-1/2 p-5 lg:p-10 z-50">
+					<p className="text-[35px] font-extrabold w-full text-center lg:text-left">
 						Welcome to Face Guardian!
 					</p>
 					<p className="leading-[30px] text-[20px]">

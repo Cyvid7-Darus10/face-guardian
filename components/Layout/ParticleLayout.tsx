@@ -5,9 +5,7 @@ const ParticleLayout = ({ children, title }) => {
 	return (
 		<>
 			<Head>
-				<title>
-					{title ? `${title} | ` : ""} {process.env.NEXT_PUBLIC_SITE_NAME}
-				</title>
+				<title>{title ? `${title} | ` : ""} Face Guardian</title>
 			</Head>
 			<div>
 				<Particle />
