@@ -5,8 +5,10 @@ import InputFields from "./components/InputFields";
 import useToast from "../../../Atom/Toast";
 import isEmail from "validator/lib/isEmail";
 import { passwordStrength } from "check-password-strength";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 const InputDetails = () => {
+	const supabaseClient = useSupabaseClient();
 	const { openSnackbar, Snackbar } = useToast();
 
 	const [userData, setUserData] = useState({
@@ -16,13 +18,15 @@ const InputDetails = () => {
 		password: "",
 	});
 
-	const onSubmit = () => {
+	const onSubmit = async () => {
 		if (!isEmail(userData.email)) {
 			openSnackbar("Please enter a valid email", "error");
 			return;
 		} else if (passwordStrength(userData.password).id < 2) {
 			openSnackbar(
-				"The password is too weak use a stronger password. Use at least 8 characters, a number, a lowercase and an uppercase letter",
+				`The password is ${passwordStrength(
+					userData.password
+				).value.toLowerCase()}, use a stronger password.`,
 				"error"
 			);
 			return;
@@ -34,7 +38,34 @@ const InputDetails = () => {
 			return;
 		}
 
-		openSnackbar("Account created successfully", "success");
+		const { error, data } = await supabaseClient.auth.signUp({
+			email: userData.email,
+			password: userData.password,
+			options: {
+				emailRedirectTo: "http://localhost:3000/dashboard",
+				data: {
+					first_name: userData.firstName,
+					last_name: userData.lastName,
+				},
+			},
+		});
+
+		if (error) {
+			openSnackbar(error.message, "error");
+			return;
+		} else if (data) {
+			openSnackbar(
+				"Account created successfully. Please check your email for activation.",
+				"success"
+			);
+
+			setTimeout(() => {
+				window.location.href = "/";
+			}, 5000);
+		} else {
+			openSnackbar("Something went wrong", "error");
+			return;
+		}
 	};
 
 	return (
