@@ -42,7 +42,7 @@ const Intro = () => {
 				</div>
 
 				<Button
-					href="/register/face"
+					href="/register"
 					variant="contained"
 					color="primary"
 					className="bg-[#5f9cbf] hover:bg-[#ddf3ff] hover:text-[#5f9cbf] w-full lg:w-1/2 m-auto">
