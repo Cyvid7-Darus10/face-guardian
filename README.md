@@ -1,38 +1,30 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Enhancing Security in Facial Recognition Authentication via OAuth Protocol for Third-Party Accessibility
 
-## Getting Started
+This is a Github repository for a novel approach to authentication that combines facial recognition technology with the OAuth protocol. The system aims to provide a user-friendly and secure authentication method that is easy to integrate with various websites.
 
-First, run the development server:
+The system is designed to prevent the creation of fake accounts by utilizing the Histogram of Oriented Gradients (HOG) algorithm for facial recognition and the dlib library for facial detection and landmark estimation. The integration of OAuth enables third-party accessibility, allowing for easy integration and use of the facial recognition system across various platforms and services.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+To ensure compatibility with third-party platforms, the OAuth 2.0 open standard for authorization will be integrated into the system. The system also provides a secure token-based user authentication mechanism, increasing security.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This repository will include the source code for the facial recognition and OAuth-based authentication system, as well as documentation on how to integrate it into other websites. The system will be thoroughly evaluated through usability testing, security assessment, performance evaluation, and OAuth protocol compatibility testing to ensure its effectiveness and reliability.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+## Usage
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+To use the system, follow these steps:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+1. Sign up for an account on the website using the facial recognition and OAuth-based authentication system
+2. Log in to your account using the same authentication method
+3. Use the website's services and features as usual
+4. Go to the sample site that uses the Face Guardian OAuth system
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Contributing
 
-## Learn More
+Contributions to the project are welcome! To contribute, please follow these steps:
 
-To learn more about Next.js, take a look at the following resources:
+1. Fork the repository
+2. Make your changes
+3. Submit a pull request
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+This project is licensed under the MIT License - see the LICENSE file for details.
