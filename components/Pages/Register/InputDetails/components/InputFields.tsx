@@ -1,7 +1,10 @@
+import { useState } from "react";
 import TextField from "@mui/material/TextField";
 import Email from "@mui/icons-material/Email";
 import LockIcon from "@mui/icons-material/Lock";
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import { passwordStrength } from "check-password-strength";
+import PasswordBar from "./PasswordBar";
 
 const InputFields = ({
 	userData,
@@ -15,6 +18,15 @@ const InputFields = ({
 	};
 	setUserData: (string) => void;
 }) => {
+	const [passDetails, setPassDetails] = useState({ id: 0, value: "Too weak" });
+
+	const setPassword = (password: string) => {
+		const strength = passwordStrength(password);
+		setPassDetails({ id: strength.id, value: strength.value });
+
+		setUserData({ ...userData, password });
+	};
+
 	return (
 		<div className="flex flex-col gap-5">
 			<div className="flex flex-row items-center gap-2 justify-center">
@@ -65,10 +77,15 @@ const InputFields = ({
 					type="password"
 					value={userData.password}
 					onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-						setUserData({ ...userData, password: event.target.value })
+						setPassword(event.target.value)
 					}
 				/>
 			</div>
+			{userData.password && (
+				<div className="flex flex-row items-center justify-center mx-auto text-sm font-bold gap-2 w-1/2">
+					<PasswordBar passDetails={passDetails} />
+				</div>
+			)}
 		</div>
 	);
 };

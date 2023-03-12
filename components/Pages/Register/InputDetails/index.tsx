@@ -3,6 +3,8 @@ import Image from "next/image";
 import Button from "@mui/material/Button";
 import InputFields from "./components/InputFields";
 import useToast from "../../../Atom/Toast";
+import isEmail from "validator/lib/isEmail";
+import { passwordStrength } from "check-password-strength";
 
 const InputDetails = () => {
 	const { openSnackbar, Snackbar } = useToast();
@@ -15,7 +17,23 @@ const InputDetails = () => {
 	});
 
 	const onSubmit = () => {
-		console.log(userData);
+		if (!isEmail(userData.email)) {
+			openSnackbar("Please enter a valid email", "error");
+			return;
+		} else if (passwordStrength(userData.password).id < 2) {
+			openSnackbar(
+				"The password is too weak use a stronger password. Use at least 8 characters, a number, a lowercase and an uppercase letter",
+				"error"
+			);
+			return;
+		} else if (userData.firstName.length < 1) {
+			openSnackbar("Please enter your first name", "error");
+			return;
+		} else if (userData.lastName.length < 1) {
+			openSnackbar("Please enter your last name", "error");
+			return;
+		}
+
 		openSnackbar("Account created successfully", "success");
 	};
 
