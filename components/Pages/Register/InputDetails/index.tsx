@@ -42,7 +42,7 @@ const InputDetails = () => {
 			email: userData.email,
 			password: userData.password,
 			options: {
-				emailRedirectTo: "http://localhost:3000/dashboard",
+				emailRedirectTo: "https://www.face-guardian.com/home",
 				data: {
 					first_name: userData.firstName,
 					last_name: userData.lastName,
@@ -73,8 +73,8 @@ const InputDetails = () => {
 			<Image
 				src="/fg-logo.png"
 				alt="fg-logo"
-				width={1000}
-				height={1000}
+				width={500}
+				height={500}
 				className="z-50 w-full lg:w-1/3"
 			/>
 			<div className="flex flex-col gap-5 w-full lg:w-1/2 p-5 lg:p-10 z-50">

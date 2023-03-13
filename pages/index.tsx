@@ -50,8 +50,8 @@ const Home = () => {
 				<Image
 					src="/fg-logo.png"
 					alt="fg-logo"
-					width={1000}
-					height={1000}
+					width={500}
+					height={500}
 					className="z-50 w-full lg:w-1/3"
 				/>
 			</div>

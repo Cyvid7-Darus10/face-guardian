@@ -8,8 +8,8 @@ const Face = ({ setIsFaceStored }: { setIsFaceStored: (boolean) => void }) => {
 				<Image
 					src="/fg-logo.png"
 					alt="fg-logo"
-					width={1000}
-					height={1000}
+					width={500}
+					height={500}
 					className="z-50 lg:w-[100px]"
 				/>
 				<p className="text-[35px] font-extrabold w-full text-center lg:text-left">
