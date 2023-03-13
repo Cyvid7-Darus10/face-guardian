@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 
 const Intro = () => {
 	return (
-		<ParticleLayout title="Intro">
+		<ParticleLayout title="Intro" restrict={true}>
 			<div className="flex flex-col items-center gap-10 w-full lg:w-1/2 p-5 lg:p-10 z-50 mx-auto">
 				<div className="flex flex-col items-center">
 					<Image

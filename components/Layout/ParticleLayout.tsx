@@ -1,7 +1,25 @@
+import { useEffect, ReactNode } from "react";
 import Particle from "../Common/Particles";
 import Head from "next/head";
+import { useSession } from "@supabase/auth-helpers-react";
 
-const ParticleLayout = ({ children, title }) => {
+const ParticleLayout = ({
+	children,
+	title,
+	restrict,
+}: {
+	children: ReactNode;
+	title?: string;
+	restrict?: boolean;
+}) => {
+	const session = useSession();
+
+	useEffect(() => {
+		if (session?.user?.email && restrict) {
+			window.location.href = "/home";
+		}
+	}, [session, restrict]);
+
 	return (
 		<>
 			<Head>

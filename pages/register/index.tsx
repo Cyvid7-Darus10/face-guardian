@@ -6,7 +6,7 @@ import ParticleLayout from "../../components/Layout/ParticleLayout";
 const Register = () => {
 	const [isFaceStored, setIsFaceStored] = useState(false);
 	return (
-		<ParticleLayout title="Register">
+		<ParticleLayout title="Register" restrict={true}>
 			{isFaceStored ? (
 				<InputDetails />
 			) : (
