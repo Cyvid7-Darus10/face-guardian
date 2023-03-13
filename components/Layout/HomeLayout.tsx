@@ -57,7 +57,7 @@ const HomeLayout = ({
 				<meta property="twitter:image" content="/fg-logo.png" />
 				<title>{title ? `${title} | Face Guardian` : "Face Guardian"}</title>
 			</Head>
-			<div className="max-w-[1440px] mx-auto">
+			<div className="max-w-[1440px] mx-auto h-screen">
 				{!restrictPage && children}
 				{restrictPage && <UnAuthorize />}
 			</div>
