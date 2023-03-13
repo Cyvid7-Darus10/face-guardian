@@ -1,7 +1,7 @@
 import { useEffect, ReactNode, useState } from "react";
 import Head from "next/head";
 import { useSession } from "@supabase/auth-helpers-react";
-import UnAuthorize from "../Common/Unauthorize";
+import UnAuthorize from "../Common/UnAuthorize";
 
 const HomeLayout = ({
 	children,
