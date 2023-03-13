@@ -1,9 +1,9 @@
 import { useEffect, ReactNode, useState } from "react";
 import Head from "next/head";
 import { useSession } from "@supabase/auth-helpers-react";
-import Particle from "../Common/Particles";
+import UnAuthorize from "../Common/Unauthorize";
 
-const ParticleLayout = ({
+const HomeLayout = ({
 	children,
 	title,
 	restrict,
@@ -17,8 +17,6 @@ const ParticleLayout = ({
 
 	useEffect(() => {
 		if (session?.user?.email && restrict) {
-			window.location.href = "/home";
-		} else {
 			setRestrictPage(false);
 		}
 	}, [session, restrict]);
@@ -59,14 +57,12 @@ const ParticleLayout = ({
 				<meta property="twitter:image" content="/fg-logo.png" />
 				<title>{title ? `${title} | Face Guardian` : "Face Guardian"}</title>
 			</Head>
-			<div className="select-none">
-				<Particle />
-				<div className="max-w-[1440px] mx-auto">
-					{!restrictPage && children}
-				</div>
+			<div className="max-w-[1440px] mx-auto">
+				{!restrictPage && children}
+				{restrictPage && <UnAuthorize />}
 			</div>
 		</>
 	);
 };
 
-export default ParticleLayout;
+export default HomeLayout;

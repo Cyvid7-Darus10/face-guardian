@@ -83,7 +83,7 @@ const InputDetails = () => {
 					onClick={onSubmit}
 					variant="contained"
 					color="primary"
-					className="bg-[#5f9cbf] hover:bg-[#ddf3ff] hover:text-[#5f9cbf] w-full lg:w-1/2 m-auto">
+					className="bg-[#5f9cbf] hover:bg-[#ddf3ff] hover:text-[#5f9cbf] w-full ">
 					Create account
 				</Button>
 			</div>
