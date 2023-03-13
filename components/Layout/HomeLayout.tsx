@@ -2,6 +2,7 @@ import { useEffect, ReactNode, useState } from "react";
 import Head from "next/head";
 import { useSession } from "@supabase/auth-helpers-react";
 import UnAuthorize from "../Common/UnAuthorize";
+import Navbar from "../Atom/Navbar";
 
 const HomeLayout = ({
 	children,
@@ -57,9 +58,12 @@ const HomeLayout = ({
 				<meta property="twitter:image" content="/fg-logo.png" />
 				<title>{title ? `${title} | Face Guardian` : "Face Guardian"}</title>
 			</Head>
-			<div className="max-w-[1440px] mx-auto h-screen">
-				{!restrictPage && children}
-				{restrictPage && <UnAuthorize />}
+			<div className="h-screen">
+				<div className="h-[720px]">
+					{!restrictPage && <Navbar />}
+					{!restrictPage && children}
+					{restrictPage && <UnAuthorize />}
+				</div>
 			</div>
 		</>
 	);

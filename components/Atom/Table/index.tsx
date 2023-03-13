@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -6,8 +6,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
 import Link from "next/link";
+import Modal from "../Modal";
 
 function createData(
 	name: string,
@@ -27,11 +27,13 @@ const rows = [
 ];
 
 export default function BasicTable() {
+	const [open, setOpen] = useState(false);
+
 	return (
 		<TableContainer component={Paper}>
 			<Table sx={{ minWidth: 650 }}>
 				<TableHead>
-					<TableRow className="bg-gray-100">
+					<TableRow className="bg-[#ddf3ff] ">
 						<TableCell align="center">Website</TableCell>
 						<TableCell align="center">Date Created</TableCell>
 						<TableCell align="center">Last Accessed</TableCell>
@@ -41,7 +43,7 @@ export default function BasicTable() {
 				<TableBody>
 					{rows.map((row) => (
 						<TableRow key={row.name}>
-							<TableCell component="th" scope="row">
+							<TableCell component="th" scope="row" align="center">
 								<Link
 									href={row.url}
 									target="_blank"
@@ -50,21 +52,22 @@ export default function BasicTable() {
 									{row.name}
 								</Link>
 							</TableCell>
-							<TableCell>{row.dateCreated}</TableCell>
-							<TableCell>{row.lastAccessed}</TableCell>
+							<TableCell align="center">{row.dateCreated}</TableCell>
+							<TableCell align="center">{row.lastAccessed}</TableCell>
 							<TableCell align="center">
-								<Button
-									href="/register"
-									variant="contained"
-									color="error"
-									className=" hover:bg-[#ddf3ff] hover:text-[#5f9cbf]">
+								<button
+									onClick={() => {
+										setOpen(true);
+									}}
+									className="bg-red-400 text-white px-2 py-1 rounded-md">
 									Delete
-								</Button>
+								</button>
 							</TableCell>
 						</TableRow>
 					))}
 				</TableBody>
 			</Table>
+			<Modal open={open} setOpen={setOpen} />
 		</TableContainer>
 	);
 }

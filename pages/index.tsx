@@ -1,7 +1,8 @@
 import ParticleLayout from "../components/Layout/ParticleLayout";
-import Image from "next/image";
-import Button from "@mui/material/Button";
+
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
+import Link from "next/link";
+import Image from "next/image";
 
 const Home = () => {
 	return (
@@ -31,14 +32,19 @@ const Home = () => {
 						account, you'll be able to access all of the features and
 						functionality of Face Guardian.`}
 					</p>
-					<Button
-						href="/register/intro"
-						variant="contained"
-						color="primary"
-						className="bg-[#5f9cbf] hover:bg-[#ddf3ff] hover:text-[#5f9cbf] w-full lg:w-1/2 m-auto">
-						<RocketLaunchIcon />
-						Get Started
-					</Button>
+					<div className="flex flex-row gap-2 text-white text-center">
+						<Link
+							href="/register/intro"
+							className="bg-[#5f9cbf] hover:bg-[#ddf3ff] hover:text-[#5f9cbf] w-full lg:w-1/2 m-auto p-2 rounded-md">
+							<RocketLaunchIcon />
+							Get Started (Register)
+						</Link>
+						<Link
+							href="/login"
+							className="bg-[#5f9cbf] hover:bg-[#ddf3ff] hover:text-[#5f9cbf] w-full lg:w-1/2 m-auto p-2 rounded-md">
+							Login
+						</Link>
+					</div>
 				</div>
 
 				<Image

@@ -1,6 +1,6 @@
 import ParticleLayout from "../../components/Layout/ParticleLayout";
 import Image from "next/image";
-import Button from "@mui/material/Button";
+import Link from "next/link";
 
 const Intro = () => {
 	return (
@@ -41,13 +41,18 @@ const Intro = () => {
 					</p>
 				</div>
 
-				<Button
-					href="/register"
-					variant="contained"
-					color="primary"
-					className="bg-[#5f9cbf] hover:bg-[#ddf3ff] hover:text-[#5f9cbf] w-full lg:w-1/2 m-auto">
-					Next
-				</Button>
+				<div className="flex flex-row gap-2 text-white text-center z-50 w-full">
+					<Link
+						href="/"
+						className="bg-[#5f9cbf] hover:bg-[#ddf3ff] hover:text-[#5f9cbf] w-full lg:w-1/2 m-auto p-2 rounded-md">
+						Back
+					</Link>
+					<Link
+						href="/register"
+						className="bg-[#5f9cbf] hover:bg-[#ddf3ff] hover:text-[#5f9cbf] w-full lg:w-1/2 m-auto p-2 rounded-md">
+						Next
+					</Link>
+				</div>
 			</div>
 		</ParticleLayout>
 	);
