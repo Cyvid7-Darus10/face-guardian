@@ -61,7 +61,7 @@ const InputDetails = () => {
 
 			setTimeout(() => {
 				window.location.href = "/";
-			}, 5000);
+			}, 3000);
 		} else {
 			openSnackbar("Something went wrong", "error");
 			return;
@@ -73,8 +73,8 @@ const InputDetails = () => {
 			<Image
 				src="/fg-logo.png"
 				alt="fg-logo"
-				width={500}
-				height={500}
+				width={300}
+				height={300}
 				className="z-50 w-full lg:w-1/3"
 			/>
 			<div className="flex flex-col gap-5 w-full lg:w-1/2 p-5 lg:p-10 z-50">

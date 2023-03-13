@@ -8,8 +8,8 @@ const UnAuthorize = () => {
 				<Image
 					src="/fg-logo.png"
 					alt="fg-logo"
-					width={500}
-					height={500}
+					width={300}
+					height={300}
 					className="z-50 lg:w-[100px]"
 				/>
 				<p className="text-[35px] font-extrabold w-full text-center lg:text-left">
