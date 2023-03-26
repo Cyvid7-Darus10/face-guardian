@@ -3,7 +3,7 @@ import Dashboard from "../../components/Common/Dashboard";
 
 const Register = () => {
 	return (
-		<HomeLayout title="Login" restrict={true}>
+		<HomeLayout title="Home" restrict={true}>
 			<Dashboard />
 		</HomeLayout>
 	);
