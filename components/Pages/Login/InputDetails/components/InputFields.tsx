@@ -27,7 +27,7 @@ const InputFields = ({
 	};
 
 	return (
-		<div className="flex flex-col gap-5">
+		<div className="flex flex-col gap-5 w-full">
 			<div className="flex flex-row items-center gap-2 justify-center text-dark">
 				<Email />
 				<Input

@@ -1,12 +1,14 @@
 import Button from "@mui/material/Button";
 import Table from "../../Atom/Table";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useRouter } from "next/router";
 
 const Dashboard = () => {
+	const router = useRouter();
 	const supabaseClient = useSupabaseClient();
-	const logoutUser = () => {
-		supabaseClient.auth.signOut();
-		window.location.href = "/";
+	const logoutUser = async () => {
+		await supabaseClient.auth.signOut();
+		router.push("/");
 	};
 
 	return (

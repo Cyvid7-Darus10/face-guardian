@@ -37,7 +37,7 @@ const Home = () => {
 							href="/register/intro"
 							className="bg-[#5f9cbf] hover:bg-[#ddf3ff] hover:text-[#5f9cbf] w-full lg:w-1/2 m-auto p-2 rounded-md">
 							<RocketLaunchIcon />
-							Get Started (Register)
+							Register
 						</Link>
 						<Link
 							href="/login"

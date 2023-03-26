@@ -53,7 +53,7 @@ const InputDetails = () => {
 				height={300}
 				className="z-50 w-full lg:w-1/3"
 			/>
-			<div className="flex flex-col gap-5 w-full lg:w-1/2 p-5 lg:p-10 z-50">
+			<div className="flex flex-col items-center gap-5 w-full lg:w-1/2 p-5 lg:p-10 z-50">
 				<InputFields userData={userData} setUserData={setUserData} />
 				<Button
 					onClick={onSubmit}
