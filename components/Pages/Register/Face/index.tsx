@@ -1,7 +1,12 @@
 import Image from "next/image";
 import Button from "@mui/material/Button";
+import FaceRecognition from "../FaceRecognition";
 
-const Face = ({ setIsFaceStored }: { setIsFaceStored: (boolean) => void }) => {
+const Face = ({
+	setIsFaceStored,
+}: {
+	setIsFaceStored: (arg: boolean) => void;
+}) => {
 	return (
 		<div className="flex flex-col items-center gap-10 w-full lg:w-1/2 p-5 lg:p-10 z-50 mx-auto">
 			<div className="flex flex-col items-center">
@@ -16,7 +21,9 @@ const Face = ({ setIsFaceStored }: { setIsFaceStored: (boolean) => void }) => {
 					Face Guardian
 				</p>
 			</div>
-			<div className="flex flex-col items-center justify-center gap-5 bg-[#ddf3ff] p-10 shadow h-full w-full lg:h-[400px] lg:w-[500px]"></div>
+			<div className="flex flex-col items-center justify-center gap-5 bg-[#ddf3ff] p-10 shadow h-full w-full lg:h-[400px] lg:w-[500px] z-50">
+				<FaceRecognition />
+			</div>
 
 			<Button
 				onClick={() => setIsFaceStored(true)}
