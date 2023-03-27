@@ -31,7 +31,7 @@ const useToast = (): useToastReturn => {
 		setSnackbar({ open: true, message, severity });
 	};
 
-	const handleClose = (event?: React.SyntheticEvent) => {
+	const handleClose = (event: any) => {
 		if (event && event.type === "clickaway") {
 			return;
 		}

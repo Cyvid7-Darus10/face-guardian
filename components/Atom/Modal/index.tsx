@@ -21,7 +21,7 @@ export default function BasicModal({
 	setOpen,
 }: {
 	open: boolean;
-	setOpen: (boolean) => void;
+	setOpen: (arg: boolean) => void;
 }) {
 	const { openSnackbar, Snackbar } = useToast();
 	const handleClose = () => setOpen(false);

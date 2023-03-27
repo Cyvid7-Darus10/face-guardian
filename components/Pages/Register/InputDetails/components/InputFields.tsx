@@ -16,7 +16,7 @@ const InputFields = ({
 		email: string;
 		password: string;
 	};
-	setUserData: (string) => void;
+	setUserData: (arg: any) => void;
 }) => {
 	const [passDetails, setPassDetails] = useState({ id: 0, value: "Too weak" });
 

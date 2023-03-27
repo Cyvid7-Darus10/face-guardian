@@ -15,7 +15,7 @@ const InputFields = ({
 		email: string;
 		password: string;
 	};
-	setUserData: (string) => void;
+	setUserData: (arg: any) => void;
 }) => {
 	const [showPassword, setShowPassword] = useState(false);
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
