@@ -21,9 +21,8 @@ const Face = ({
 					Face Guardian
 				</p>
 			</div>
-			<div className="flex flex-col items-center justify-center gap-5 bg-[#ddf3ff] p-10 shadow h-full w-full lg:h-[400px] lg:w-[500px] z-50">
-				<FaceRecognition />
-			</div>
+
+			<FaceRecognition />
 
 			<Button
 				onClick={() => setIsFaceStored(true)}

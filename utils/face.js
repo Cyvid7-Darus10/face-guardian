@@ -28,6 +28,18 @@ export async function getFullFaceDescription(blob, inputSize = 512) {
 	return fullDesc;
 }
 
+export async function detectFace(blob, inputSize = 512) {
+	// tiny_face_detector options
+	let scoreThreshold = 0.5;
+	const OPTION = new faceapi.TinyFaceDetectorOptions({
+		inputSize,
+		scoreThreshold,
+	});
+	let img = await faceapi.fetchImage(blob);
+	let detected = await faceapi.detectAllFaces(img, OPTION);
+	return detected;
+}
+
 const maxDescriptorDistance = 0.5;
 export async function createMatcher(faceProfile) {
 	// Create labeled descriptors of member from profile

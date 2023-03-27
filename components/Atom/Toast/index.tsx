@@ -45,7 +45,8 @@ const useToast = (): useToastReturn => {
 			<Snackbar
 				open={snackbar.open}
 				autoHideDuration={6000}
-				onClose={handleClose}>
+				onClose={handleClose}
+				anchorOrigin={{ vertical: "top", horizontal: "right" }}>
 				<Alert
 					onClose={() => setSnackbar({ ...snackbar, open: false })}
 					severity={snackbar.severity}

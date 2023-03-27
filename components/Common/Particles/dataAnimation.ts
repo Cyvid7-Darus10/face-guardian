@@ -4,10 +4,10 @@ export const defaultAnimation: any = {
 	},
 	particles: {
 		number: {
-			value: 100,
+			value: 80,
 			density: {
 				enable: true,
-				value_area: 800,
+				value_area: 1200,
 			},
 		},
 		color: {
