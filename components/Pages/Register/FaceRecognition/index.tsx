@@ -132,7 +132,10 @@ const FaceRecognition = ({
 						className="z-50 w-[720px] h-[720px] absolute"
 					/>
 					<button
-						onClick={() => setImageURL(null)}
+						onClick={() => {
+							setImageURL(null);
+							capture(faceMatcher);
+						}}
 						className="bg-[#5f9cbf] text-white rounded-full hover:bg-[#ddf3ff] hover:text-[#5f9cbf] m-auto z-50 p-4">
 						<ReplayIcon />
 					</button>
