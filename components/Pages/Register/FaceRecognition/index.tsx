@@ -9,9 +9,7 @@ import Image from "next/image";
 import { data } from "./faceData";
 import Webcam from "react-webcam";
 import useToast from "@/components/Atom/Toast";
-
-// Import image to test API
-const testImg = "/test/1X1.png";
+import ReplayIcon from "@mui/icons-material/Replay";
 
 // Import face profile
 const JSON_PROFILE = data;
@@ -26,7 +24,11 @@ const videoConstraints = {
 	facingMode: "user",
 };
 
-const FaceRecognition = () => {
+const FaceRecognition = ({
+	setFaceDescriptors,
+}: {
+	setFaceDescriptors: any;
+}) => {
 	const { openSnackbar, Snackbar } = useToast();
 	const webcamRef = useRef<any>(null);
 	const [imageURL, setImageURL] = useState<string | null>(null);
@@ -53,11 +55,8 @@ const FaceRecognition = () => {
 			await getFullFaceDescription(image).then((fullDesc) => {
 				if (fullDesc) {
 					temptDescriptors = fullDesc.map((fd: any) => fd.descriptor);
-					// store the descriptors of the detected faces
-					console.log(temptDescriptors);
 				}
 			});
-			console.log("fMatch", fMatch);
 			if (temptDescriptors.length > 0 && fMatch) {
 				let tempMatch = await temptDescriptors.map((descriptor: any) =>
 					fMatch.findBestMatch(descriptor)
@@ -66,6 +65,9 @@ const FaceRecognition = () => {
 					openSnackbar("User is already registered", "error");
 				} else {
 					openSnackbar("User is not yet registered", "success");
+					setTimeout(() => {
+						setFaceDescriptors(temptDescriptors);
+					}, 1000);
 				}
 				setMatch(tempMatch);
 			}
@@ -121,13 +123,20 @@ const FaceRecognition = () => {
 				</>
 			)}
 			{imageURL && (
-				<Image
-					src={imageURL}
-					width={1000}
-					height={1000}
-					alt="face-guide"
-					className="z-50 w-[720px] h-[720px] absolute"
-				/>
+				<>
+					<Image
+						src={imageURL}
+						width={1000}
+						height={1000}
+						alt="face-guide"
+						className="z-50 w-[720px] h-[720px] absolute"
+					/>
+					<button
+						onClick={() => setImageURL(null)}
+						className="bg-[#5f9cbf] text-white rounded-full hover:bg-[#ddf3ff] hover:text-[#5f9cbf] m-auto z-50 p-4">
+						<ReplayIcon />
+					</button>
+				</>
 			)}
 		</div>
 	);

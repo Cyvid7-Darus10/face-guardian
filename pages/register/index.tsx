@@ -4,13 +4,13 @@ import InputDetails from "../../components/Pages/Register/InputDetails";
 import ParticleLayout from "../../components/Layout/ParticleLayout";
 
 const Register = () => {
-	const [isFaceStored, setIsFaceStored] = useState(false);
+	const [faceDescriptors, setFaceDescriptors] = useState(false);
 	return (
 		<ParticleLayout title="Register" restrict={true}>
-			{isFaceStored ? (
+			{faceDescriptors ? (
 				<InputDetails />
 			) : (
-				<Face setIsFaceStored={setIsFaceStored} />
+				<Face setFaceDescriptors={setFaceDescriptors} />
 			)}
 		</ParticleLayout>
 	);

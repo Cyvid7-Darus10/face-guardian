@@ -1,11 +1,10 @@
 import Image from "next/image";
-import Button from "@mui/material/Button";
 import FaceRecognition from "../FaceRecognition";
 
 const Face = ({
-	setIsFaceStored,
+	setFaceDescriptors,
 }: {
-	setIsFaceStored: (arg: boolean) => void;
+	setFaceDescriptors: (arg: boolean) => void;
 }) => {
 	return (
 		<div className="flex flex-col items-center gap-10 w-full lg:w-1/2 p-5 lg:p-10 z-50 mx-auto">
@@ -21,16 +20,7 @@ const Face = ({
 					Face Guardian
 				</p>
 			</div>
-
-			<FaceRecognition />
-
-			<Button
-				onClick={() => setIsFaceStored(true)}
-				variant="contained"
-				color="primary"
-				className="bg-[#5f9cbf] hover:bg-[#ddf3ff] hover:text-[#5f9cbf] w-full lg:w-1/2 m-auto">
-				Next
-			</Button>
+			<FaceRecognition setFaceDescriptors={setFaceDescriptors} />
 		</div>
 	);
 };
