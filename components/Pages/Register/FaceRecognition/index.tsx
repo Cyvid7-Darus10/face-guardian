@@ -1,4 +1,4 @@
-import { useEffect, useState, ChangeEvent, useRef, useCallback } from "react";
+import { useEffect, useState, useRef } from "react";
 import {
 	loadModels,
 	createMatcher,
@@ -11,7 +11,6 @@ import Webcam from "react-webcam";
 import useToast from "@/components/Atom/Toast";
 import ReplayIcon from "@mui/icons-material/Replay";
 
-// Import face profile
 const JSON_PROFILE = data;
 
 interface Match {
@@ -94,10 +93,6 @@ const FaceRecognition = ({
 			await new Promise((resolve) => setTimeout(resolve, 100)); // wait for 100ms before trying again
 		}
 	};
-
-	useEffect(() => {
-		console.log(match);
-	}, [match]);
 
 	return (
 		<div className="flex flex-col items-center justify-center gap-5 w-[700px] h-[700px] bg-[#ddf3ff] p-10 shadow z-50">
