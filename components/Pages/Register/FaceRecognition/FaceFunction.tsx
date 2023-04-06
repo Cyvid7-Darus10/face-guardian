@@ -31,9 +31,7 @@ const FaceFunction = ({ setFaceDescriptors }: { setFaceDescriptors: any }) => {
 	useEffect(() => {
 		const fetchData = async () => {
 			await loadModels();
-			console.log("GETTING FACE DATA");
 			const data = await faceData(supabaseClient);
-			console.log("CREATIGN FACE MATCHER");
 			const faceMatcher = await createMatcher(data);
 			setFaceMatcher(faceMatcher);
 			await capture(faceMatcher);
