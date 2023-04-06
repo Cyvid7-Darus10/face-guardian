@@ -5,11 +5,10 @@ import {
 	getFullFaceDescription,
 	detectFace,
 } from "@/utils/face";
-import { data } from "./faceData";
+import { faceData } from "./faceData";
 import useToast from "@/components/Atom/Toast";
 import ReplayIcon from "@mui/icons-material/Replay";
-
-const JSON_PROFILE = data;
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 interface Match {
 	_label: string;
@@ -27,16 +26,19 @@ const FaceFunction = ({ setFaceDescriptors }: { setFaceDescriptors: any }) => {
 	const [imageURL, setImageURL] = useState<string | null>(null);
 	const [match, setMatch] = useState<Match[] | null>(null);
 	const [faceMatcher, setFaceMatcher] = useState<any>(null);
+	const supabaseClient = useSupabaseClient();
 
 	useEffect(() => {
 		const fetchData = async () => {
 			await loadModels();
-			const faceMatcher = await createMatcher(JSON_PROFILE);
+			console.log("GETTING FACE DATA");
+			const data = await faceData(supabaseClient);
+			console.log("CREATIGN FACE MATCHER");
+			const faceMatcher = await createMatcher(data);
 			setFaceMatcher(faceMatcher);
 			await capture(faceMatcher);
 		};
 		fetchData();
-		// eslint-disable-next-line
 	}, []);
 
 	const handleImage = async (
