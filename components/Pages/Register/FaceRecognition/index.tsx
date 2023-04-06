@@ -95,7 +95,7 @@ const FaceRecognition = ({
 	};
 
 	return (
-		<div className="flex flex-col items-center justify-center gap-5 w-[700px] h-[700px] bg-[#ddf3ff] p-10 shadow z-50">
+		<div className="flex flex-col items-center justify-center gap-5 w-[400px] h-[400px] bg-[#ddf3ff] p-10 shadow z-50">
 			{Snackbar}
 			{!imageURL && (
 				<>
@@ -113,7 +113,7 @@ const FaceRecognition = ({
 						width={1000}
 						height={1000}
 						alt="face-guide"
-						className="z-50 w-[400px] h-[400px] absolute opacity-60"
+						className="z-50 w-[300px] h-[300px] absolute opacity-60"
 					/>
 				</>
 			)}
@@ -124,7 +124,7 @@ const FaceRecognition = ({
 						width={1000}
 						height={1000}
 						alt="face-guide"
-						className="z-50 w-[720px] h-[720px] absolute"
+						className="z-50 w-[400px] h-[400px] absolute"
 					/>
 					<button
 						onClick={() => {
