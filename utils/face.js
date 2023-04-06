@@ -30,7 +30,7 @@ export async function getFullFaceDescription(blob, inputSize = 512) {
 
 export async function detectFace(blob, inputSize = 512) {
 	// tiny_face_detector options
-	let scoreThreshold = 0.5;
+	let scoreThreshold = 0.85;
 	const OPTION = new faceapi.TinyFaceDetectorOptions({
 		inputSize,
 		scoreThreshold,
