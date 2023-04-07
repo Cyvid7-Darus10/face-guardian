@@ -36,6 +36,7 @@ const FaceFunction = ({ setFaceDescriptors }: { setFaceDescriptors: any }) => {
 			await capture(faceMatcher);
 		};
 		fetchData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const handleImage = async (

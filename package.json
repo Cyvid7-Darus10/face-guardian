@@ -29,7 +29,8 @@
     "react-webcam": "^7.0.1",
     "tsparticles": "^2.9.3",
     "tsparticles-engine": "^2.9.3",
-    "validator": "^13.9.0"
+    "validator": "^13.9.0",
+    "zustand": "^4.3.7"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.1.1",

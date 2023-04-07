@@ -7,14 +7,14 @@ import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import Image from "next/image";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
-const pages = ["Home", "About", "Sponsor"];
-const settings = ["Profile", "Account", "Dashboard"];
+const pages = ["Home", "About", "Integration", "Contact"];
+const settings = ["Account"];
 
 function ResponsiveAppBar() {
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -40,8 +40,8 @@ function ResponsiveAppBar() {
 	};
 
 	return (
-		<AppBar position="static">
-			<Container maxWidth="xl" sx={{ backgroundColor: "#ddf3ff" }}>
+		<AppBar position="static" sx={{ backgroundColor: "#ddf3ff" }}>
+			<Container maxWidth="xl">
 				<Toolbar disableGutters>
 					<Typography
 						variant="h6"
@@ -127,11 +127,10 @@ function ResponsiveAppBar() {
 							</Button>
 						))}
 					</Box>
-
 					<Box sx={{ flexGrow: 0 }}>
 						<Tooltip title="Open settings">
-							<IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-								<Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+							<IconButton onClick={handleOpenUserMenu}>
+								<AdminPanelSettingsIcon />
 							</IconButton>
 						</Tooltip>
 						<Menu
