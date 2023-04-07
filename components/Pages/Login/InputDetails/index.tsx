@@ -4,12 +4,12 @@ import Button from "@mui/material/Button";
 import InputFields from "./components/InputFields";
 import isEmail from "validator/lib/isEmail";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import useDeviceID from "@/store/useDeviceID";
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import { toast } from "react-toastify";
 
 const InputDetails = () => {
 	const supabaseClient = useSupabaseClient();
-	const { deviceID } = useDeviceID();
+	const fpPromise = FingerprintJS.load();
 
 	const [userData, setUserData] = useState({
 		email: "",
@@ -47,6 +47,10 @@ const InputDetails = () => {
 				type: "success",
 				autoClose: 2000,
 			});
+
+			const fp = await fpPromise;
+			const result = await fp.get();
+			const deviceID = result.visitorId;
 
 			insertDeviceID(data?.user?.id as string, deviceID);
 

@@ -6,12 +6,12 @@ import isEmail from "validator/lib/isEmail";
 import { passwordStrength } from "check-password-strength";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import * as Crypto from "crypto-js";
-import useDeviceID from "@/store/useDeviceID";
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import { toast } from "react-toastify";
 
 const InputDetails = ({ faceDescriptors }: { faceDescriptors: any }) => {
 	const supabaseClient = useSupabaseClient();
-	const { deviceID } = useDeviceID();
+	const fpPromise = FingerprintJS.load();
 
 	const [userData, setUserData] = useState({
 		firstName: "",
@@ -91,6 +91,10 @@ const InputDetails = ({ faceDescriptors }: { faceDescriptors: any }) => {
 				});
 				return;
 			}
+
+			const fp = await fpPromise;
+			const result = await fp.get();
+			const deviceID = result.visitorId;
 
 			const { error: errror2 } = await supabaseClient
 				.from("profile_devices")

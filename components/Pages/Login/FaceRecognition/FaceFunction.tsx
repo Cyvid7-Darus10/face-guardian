@@ -9,8 +9,8 @@ import { faceData } from "./faceData";
 import ReplayIcon from "@mui/icons-material/Replay";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import * as Crypto from "crypto-js";
-import useDeviceID from "@/store/useDeviceID";
 import { toast } from "react-toastify";
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
 const videoConstraints = {
 	width: 720,
@@ -23,7 +23,7 @@ const FaceFunction = () => {
 	const [imageURL, setImageURL] = useState<string | null>(null);
 	const [faceMatcher, setFaceMatcher] = useState<any>(null);
 	const supabaseClient = useSupabaseClient();
-	const { deviceID } = useDeviceID();
+	const fpPromise = FingerprintJS.load();
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -155,6 +155,10 @@ const FaceFunction = () => {
 	};
 
 	const isCurrentDevicePresent = async (devices: any): Promise<boolean> => {
+		const fp = await fpPromise;
+		const result = await fp.get();
+		const deviceID = result.visitorId;
+
 		if (devices.includes(deviceID)) {
 			return true;
 		} else {
