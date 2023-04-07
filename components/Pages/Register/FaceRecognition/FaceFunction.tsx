@@ -54,8 +54,8 @@ const FaceFunction = ({ setFaceDescriptors }: { setFaceDescriptors: any }) => {
 					fMatch.findBestMatch(descriptor)
 				);
 				if (tempMatch[0]._label !== "unknown") {
-					toast("Login Successful", {
-						type: "success",
+					toast("User is registered already", {
+						type: "error",
 						autoClose: 2000,
 					});
 				} else {
@@ -67,6 +67,11 @@ const FaceFunction = ({ setFaceDescriptors }: { setFaceDescriptors: any }) => {
 						setFaceDescriptors(temptDescriptors);
 					}, 1000);
 				}
+			} else {
+				toast("Something went wrong", {
+					type: "error",
+					autoClose: 2000,
+				});
 			}
 		}
 	};
@@ -89,11 +94,11 @@ const FaceFunction = ({ setFaceDescriptors }: { setFaceDescriptors: any }) => {
 						});
 					} else if (result.length === 1) {
 						setImageURL(screenShot);
-						handleImage(screenShot, fMatcher);
 						toast("Face detected", {
 							type: "success",
 							autoClose: 2000,
 						});
+						handleImage(screenShot, fMatcher);
 						break; // exit the loop if a face is detected
 					}
 				}

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import FaceRecognition from "../FaceRecognition";
+import Link from "next/link";
 
 const Face = ({
 	setFaceDescriptors,
@@ -21,6 +22,19 @@ const Face = ({
 				</p>
 			</div>
 			<FaceRecognition setFaceDescriptors={setFaceDescriptors} />
+			<div className="flex w-full gap-2 text-center items-center justify-center z-50 2xl:text-lg">
+				<Link
+					href="/"
+					className="cursor-pointer text-[#5f9cbf] hover:underline">
+					Home
+				</Link>
+				|
+				<Link
+					href="/login/email"
+					className="cursor-pointer text-[#5f9cbf] hover:underline">
+					Login using email?
+				</Link>
+			</div>
 		</div>
 	);
 };
