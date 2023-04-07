@@ -1,12 +1,8 @@
 import Image from "next/image";
-import Button from "@mui/material/Button";
 import Link from "next/link";
+import FaceRecognition from "../FaceRecognition";
 
 const Face = () => {
-	const handleFaceAuth = () => {
-		console.log("Face Auth");
-	};
-
 	return (
 		<div className="flex flex-col items-center gap-10 w-full lg:w-[800px] p-5 lg:p-10 z-50 mx-auto">
 			<div className="flex flex-col items-center">
@@ -21,14 +17,7 @@ const Face = () => {
 					Face Guardian
 				</p>
 			</div>
-			<div className="flex flex-col items-center justify-center gap-5 bg-[#ddf3ff] p-10 shadow h-full w-full lg:h-[350px]"></div>
-			<Button
-				onClick={handleFaceAuth}
-				variant="contained"
-				color="primary"
-				className="bg-[#5f9cbf] hover:bg-[#ddf3ff] hover:text-[#5f9cbf] m-auto">
-				Auth Face
-			</Button>
+			<FaceRecognition />
 			<div className="flex w-full gap-2 text-center items-center justify-center z-50 2xl:text-lg">
 				<Link
 					href="/register"
