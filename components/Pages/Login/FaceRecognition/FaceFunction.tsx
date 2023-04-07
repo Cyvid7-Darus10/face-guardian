@@ -54,10 +54,6 @@ const FaceFunction = () => {
 					fMatch.findBestMatch(descriptor)
 				);
 				if (tempMatch[0]._label !== "unknown") {
-					toast("Login Successful", {
-						type: "success",
-						autoClose: 2000,
-					});
 					const userId = tempMatch[0]._label;
 					loginUser(userId);
 				} else {
