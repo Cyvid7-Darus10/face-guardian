@@ -8,7 +8,7 @@ const Register = () => {
 	return (
 		<ParticleLayout title="Register" restrict={true}>
 			{faceDescriptors ? (
-				<InputDetails />
+				<InputDetails faceDescriptors={faceDescriptors} />
 			) : (
 				<Face setFaceDescriptors={setFaceDescriptors} />
 			)}

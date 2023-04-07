@@ -24,7 +24,6 @@ const FaceFunction = ({ setFaceDescriptors }: { setFaceDescriptors: any }) => {
 	const { openSnackbar, Snackbar } = useToast();
 	const webcamRef = useRef<any>(null);
 	const [imageURL, setImageURL] = useState<string | null>(null);
-	const [match, setMatch] = useState<Match[] | null>(null);
 	const [faceMatcher, setFaceMatcher] = useState<any>(null);
 	const supabaseClient = useSupabaseClient();
 
@@ -62,7 +61,6 @@ const FaceFunction = ({ setFaceDescriptors }: { setFaceDescriptors: any }) => {
 						setFaceDescriptors(temptDescriptors);
 					}, 1000);
 				}
-				setMatch(tempMatch);
 			}
 		}
 	};

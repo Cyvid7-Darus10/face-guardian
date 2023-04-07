@@ -6,8 +6,9 @@ import useToast from "../../../Atom/Toast";
 import isEmail from "validator/lib/isEmail";
 import { passwordStrength } from "check-password-strength";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import * as Crypto from "crypto-js";
 
-const InputDetails = () => {
+const InputDetails = ({ faceDescriptors }: { faceDescriptors: any }) => {
 	const supabaseClient = useSupabaseClient();
 	const { openSnackbar, Snackbar } = useToast();
 
@@ -19,6 +20,7 @@ const InputDetails = () => {
 	});
 
 	const onSubmit = async () => {
+		console.log(faceDescriptors[0]);
 		if (!isEmail(userData.email)) {
 			openSnackbar("Please enter a valid email", "error");
 			return;
@@ -38,6 +40,11 @@ const InputDetails = () => {
 			return;
 		}
 
+		const encryptedPassword = Crypto.AES.encrypt(
+			userData.password,
+			process.env.NEXT_PUBLIC_ENCRYPTION_KEY as string
+		).toString();
+
 		const { error, data } = await supabaseClient.auth.signUp({
 			email: userData.email,
 			password: userData.password,
@@ -46,14 +53,28 @@ const InputDetails = () => {
 				data: {
 					first_name: userData.firstName,
 					last_name: userData.lastName,
+					password: encryptedPassword,
 				},
 			},
 		});
-
+		console.log("ERROR", error);
+		console.log("DATA", data);
 		if (error) {
 			openSnackbar(error.message, "error");
 			return;
 		} else if (data) {
+			const { error } = await supabaseClient.from("face_descriptors").insert([
+				{
+					profile_id: data?.user?.id,
+					descriptors: "{" + faceDescriptors[0].toString() + "}",
+				},
+			]);
+
+			if (error) {
+				openSnackbar(error.message, "error");
+				return;
+			}
+
 			openSnackbar(
 				"Account created successfully. Please check your email for activation.",
 				"success"
