@@ -13,14 +13,12 @@ const FaceRecognition = ({
 		capture,
 		videoConstraints,
 		ReplayIcon,
-		Snackbar,
 		faceMatcher,
 		setImageURL,
 	} = FaceFunction({ setFaceDescriptors });
 
 	return (
 		<div className="flex flex-col items-center justify-center gap-5 w-[400px] h-[400px] bg-[#ddf3ff] p-2 shadow z-50">
-			{Snackbar}
 			{!imageURL && (
 				<>
 					<Webcam

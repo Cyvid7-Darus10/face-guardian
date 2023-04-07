@@ -6,9 +6,9 @@ import {
 	detectFace,
 } from "@/utils/face";
 import { faceData } from "./faceData";
-import useToast from "@/components/Atom/Toast";
 import ReplayIcon from "@mui/icons-material/Replay";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { toast } from "react-toastify";
 
 interface Match {
 	_label: string;
@@ -21,7 +21,6 @@ const videoConstraints = {
 };
 
 const FaceFunction = ({ setFaceDescriptors }: { setFaceDescriptors: any }) => {
-	const { openSnackbar, Snackbar } = useToast();
 	const webcamRef = useRef<any>(null);
 	const [imageURL, setImageURL] = useState<string | null>(null);
 	const [faceMatcher, setFaceMatcher] = useState<any>(null);
@@ -55,9 +54,15 @@ const FaceFunction = ({ setFaceDescriptors }: { setFaceDescriptors: any }) => {
 					fMatch.findBestMatch(descriptor)
 				);
 				if (tempMatch[0]._label !== "unknown") {
-					openSnackbar("User is already registered", "error");
+					toast("Login Successful", {
+						type: "success",
+						autoClose: 2000,
+					});
 				} else {
-					openSnackbar("User is not yet registered", "success");
+					toast("User is not registered", {
+						type: "error",
+						autoClose: 2000,
+					});
 					setTimeout(() => {
 						setFaceDescriptors(temptDescriptors);
 					}, 1000);
@@ -67,18 +72,28 @@ const FaceFunction = ({ setFaceDescriptors }: { setFaceDescriptors: any }) => {
 	};
 
 	const capture = async (fMatcher: any) => {
-		openSnackbar("Position your face properly", "info");
+		toast("Please wait for the camera to load", {
+			type: "info",
+			autoClose: 2000,
+		});
+
 		while (true) {
 			if (webcamRef?.current) {
 				const screenShot = webcamRef.current.getScreenshot();
 				if (screenShot) {
 					const result = await detectFace(screenShot);
 					if (result.length > 1) {
-						openSnackbar("Multiple face detected", "error");
+						toast("Multiple faces detected", {
+							type: "error",
+							autoClose: 2000,
+						});
 					} else if (result.length === 1) {
 						setImageURL(screenShot);
 						handleImage(screenShot, fMatcher);
-						openSnackbar("Face Detected", "success");
+						toast("Face detected", {
+							type: "success",
+							autoClose: 2000,
+						});
 						break; // exit the loop if a face is detected
 					}
 				}
@@ -93,7 +108,6 @@ const FaceFunction = ({ setFaceDescriptors }: { setFaceDescriptors: any }) => {
 		capture,
 		videoConstraints,
 		ReplayIcon,
-		Snackbar,
 		faceMatcher,
 		setImageURL,
 	};

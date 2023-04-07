@@ -6,10 +6,12 @@ import {
 	detectFace,
 } from "@/utils/face";
 import { faceData } from "./faceData";
-import useToast from "@/components/Atom/Toast";
 import ReplayIcon from "@mui/icons-material/Replay";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import * as Crypto from "crypto-js";
+import useDeviceID from "@/store/useDeviceID";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 const videoConstraints = {
 	width: 720,
@@ -18,11 +20,11 @@ const videoConstraints = {
 };
 
 const FaceFunction = () => {
-	const { openSnackbar, Snackbar } = useToast();
 	const webcamRef = useRef<any>(null);
 	const [imageURL, setImageURL] = useState<string | null>(null);
 	const [faceMatcher, setFaceMatcher] = useState<any>(null);
 	const supabaseClient = useSupabaseClient();
+	const { deviceID } = useDeviceID();
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -47,35 +49,56 @@ const FaceFunction = () => {
 					temptDescriptors = fullDesc.map((fd: any) => fd.descriptor);
 				}
 			});
+
 			if (temptDescriptors.length > 0 && fMatch) {
 				let tempMatch = await temptDescriptors.map((descriptor: any) =>
 					fMatch.findBestMatch(descriptor)
 				);
 				if (tempMatch[0]._label !== "unknown") {
-					openSnackbar("User is registered", "success");
+					toast("Login Successful", {
+						type: "success",
+						autoClose: 2000,
+					});
 					const userId = tempMatch[0]._label;
-
 					loginUser(userId);
 				} else {
-					openSnackbar("User is not yet registered", "error");
+					toast("Login Failed", {
+						type: "error",
+						autoClose: 2000,
+					});
 				}
+			} else {
+				toast("Login Failed", {
+					type: "error",
+					autoClose: 2000,
+				});
 			}
 		}
 	};
 
 	const capture = async (fMatcher: any) => {
-		openSnackbar("Position your face properly", "info");
+		toast("Please wait while we detect your face", {
+			type: "info",
+			autoClose: 2000,
+		});
+
 		while (true) {
 			if (webcamRef?.current) {
 				const screenShot = webcamRef.current.getScreenshot();
 				if (screenShot) {
 					const result = await detectFace(screenShot);
 					if (result.length > 1) {
-						openSnackbar("Multiple face detected", "error");
+						toast("Multiple faces detected", {
+							type: "error",
+							autoClose: 2000,
+						});
 					} else if (result.length === 1) {
 						setImageURL(screenShot);
+						toast("Face detected", {
+							type: "success",
+							autoClose: 2000,
+						});
 						handleImage(screenShot, fMatcher);
-						openSnackbar("Face Detected", "success");
 						break; // exit the loop if a face is detected
 					}
 				}
@@ -87,7 +110,7 @@ const FaceFunction = () => {
 	const loginUser = async (userId: string) => {
 		const { data, error } = await supabaseClient
 			.from("profiles")
-			.select("*")
+			.select("*, profile_devices(device_id)")
 			.eq("id", userId)
 			.single();
 
@@ -96,7 +119,11 @@ const FaceFunction = () => {
 			return;
 		}
 
-		if (data) {
+		const devices = data?.profile_devices.map(
+			(device: any) => device.device_id
+		);
+
+		if (data && (await isCurrentDevicePresent(devices))) {
 			const decipheredPassword = Crypto.AES.decrypt(
 				data.password,
 				process.env.NEXT_PUBLIC_ENCRYPTION_KEY as string
@@ -108,18 +135,42 @@ const FaceFunction = () => {
 			});
 
 			if (error) {
-				openSnackbar(error.message, "error");
+				toast(error.message, {
+					type: "error",
+					autoClose: 2000,
+				});
 				return;
 			} else if (data) {
-				openSnackbar("Logged in successfully", "success");
+				toast("Login Successful", {
+					type: "success",
+					autoClose: 2000,
+				});
 
 				setTimeout(() => {
 					window.location.href = "/home";
 				}, 2000);
 			} else {
-				openSnackbar("Something went wrong", "error");
+				toast("Login Failed", {
+					type: "error",
+					autoClose: 2000,
+				});
 				return;
 			}
+		}
+	};
+
+	const isCurrentDevicePresent = async (devices: any): Promise<boolean> => {
+		console.log("Device ID: ", deviceID);
+		console.log("devices: ", devices);
+		if (devices.includes(deviceID)) {
+			console.log("Device is registered");
+			return true;
+		} else {
+			toast("Device is not registered", {
+				type: "error",
+				autoClose: 2000,
+			});
+			return false;
 		}
 	};
 
@@ -129,7 +180,6 @@ const FaceFunction = () => {
 		capture,
 		videoConstraints,
 		ReplayIcon,
-		Snackbar,
 		faceMatcher,
 		setImageURL,
 	};

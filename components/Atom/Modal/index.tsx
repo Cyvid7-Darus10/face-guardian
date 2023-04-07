@@ -2,7 +2,7 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import useToast from "../Toast";
+import { toast } from "react-toastify";
 
 const style = {
 	position: "absolute" as "absolute",
@@ -23,11 +23,13 @@ export default function BasicModal({
 	open: boolean;
 	setOpen: (arg: boolean) => void;
 }) {
-	const { openSnackbar, Snackbar } = useToast();
 	const handleClose = () => setOpen(false);
 	const handleDelete = () => {
 		console.log("delete");
-		openSnackbar("Successfully deleted", "success");
+		toast("Deleted successfully", {
+			type: "success",
+			autoClose: 2000,
+		});
 		setOpen(false);
 	};
 
@@ -55,7 +57,6 @@ export default function BasicModal({
 					</div>
 				</Box>
 			</Modal>
-			{Snackbar}
 		</div>
 	);
 }

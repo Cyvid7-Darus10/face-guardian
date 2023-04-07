@@ -21,7 +21,8 @@ const ParticleLayout = ({
 		} else {
 			setRestrictPage(false);
 		}
-	}, [session, restrict]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return (
 		<>

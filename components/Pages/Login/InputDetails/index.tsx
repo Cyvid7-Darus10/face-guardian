@@ -2,13 +2,14 @@ import { useState } from "react";
 import Image from "next/image";
 import Button from "@mui/material/Button";
 import InputFields from "./components/InputFields";
-import useToast from "../../../Atom/Toast";
 import isEmail from "validator/lib/isEmail";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import useDeviceID from "@/store/useDeviceID";
+import { toast } from "react-toastify";
 
 const InputDetails = () => {
 	const supabaseClient = useSupabaseClient();
-	const { openSnackbar, Snackbar } = useToast();
+	const { deviceID } = useDeviceID();
 
 	const [userData, setUserData] = useState({
 		email: "",
@@ -17,10 +18,16 @@ const InputDetails = () => {
 
 	const onSubmit = async () => {
 		if (!isEmail(userData.email)) {
-			openSnackbar("Please enter a valid email", "error");
+			toast("Please enter a valid email", {
+				type: "error",
+				autoClose: 2000,
+			});
 			return;
 		} else if (!userData.password) {
-			openSnackbar("Please input your password", "error");
+			toast("Please enter a password", {
+				type: "error",
+				autoClose: 2000,
+			});
 			return;
 		}
 
@@ -30,16 +37,55 @@ const InputDetails = () => {
 		});
 
 		if (error) {
-			openSnackbar(error.message, "error");
+			toast(error.message, {
+				type: "error",
+				autoClose: 2000,
+			});
 			return;
 		} else if (data) {
-			openSnackbar("Logged in successfully", "success");
+			toast("Login Successful", {
+				type: "success",
+				autoClose: 2000,
+			});
+			console.log(data);
+			insertDeviceID(data?.user?.id as string, deviceID);
 
 			setTimeout(() => {
 				window.location.href = "/home";
 			}, 2000);
 		} else {
-			openSnackbar("Something went wrong", "error");
+			toast("Login Failed", {
+				type: "error",
+				autoClose: 2000,
+			});
+			return;
+		}
+	};
+
+	const insertDeviceID = async (userID: string, deviceID: string) => {
+		const { data } = await supabaseClient
+			.from("profile_devices")
+			.select("*")
+			.eq("profile_id", userID)
+			.eq("device_id", deviceID);
+
+		if (data?.length) {
+			return;
+		}
+
+		const { error } = await supabaseClient.from("profile_devices").insert([
+			{
+				profile_id: userID,
+				device_id: deviceID,
+				user_agent: navigator.userAgent,
+			},
+		]);
+
+		if (error) {
+			toast(error.message, {
+				type: "error",
+				autoClose: 2000,
+			});
 			return;
 		}
 	};
@@ -63,7 +109,6 @@ const InputDetails = () => {
 					Login
 				</Button>
 			</div>
-			{Snackbar}
 		</div>
 	);
 };
