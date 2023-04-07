@@ -12,14 +12,17 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import Image from "next/image";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import useUserDataStore from "@/store/userDataStore";
 
 const pages = ["Home", "About", "Integration", "Contact"];
 const settings = ["Account"];
 
 function ResponsiveAppBar() {
+	const { userData } = useUserDataStore();
 	const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
 		null
 	);
+
 	const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
 		null
 	);
@@ -65,7 +68,6 @@ function ResponsiveAppBar() {
 							className="z-50"
 						/>
 					</Typography>
-
 					<Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
 						<IconButton
 							size="large"
@@ -127,6 +129,7 @@ function ResponsiveAppBar() {
 							</Button>
 						))}
 					</Box>
+					<p className="text-black">Hello, {userData?.first_name}</p>
 					<Box sx={{ flexGrow: 0 }}>
 						<Tooltip title="Open settings">
 							<IconButton onClick={handleOpenUserMenu}>

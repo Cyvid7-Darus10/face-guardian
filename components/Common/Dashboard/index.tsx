@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 const Dashboard = () => {
 	const router = useRouter();
 	const supabaseClient = useSupabaseClient();
+
 	const logoutUser = async () => {
 		await supabaseClient.auth.signOut();
 		router.push("/");

@@ -7,10 +7,12 @@ import isEmail from "validator/lib/isEmail";
 import { passwordStrength } from "check-password-strength";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import * as Crypto from "crypto-js";
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
 const InputDetails = ({ faceDescriptors }: { faceDescriptors: any }) => {
 	const supabaseClient = useSupabaseClient();
 	const { openSnackbar, Snackbar } = useToast();
+	const fpPromise = FingerprintJS.load();
 
 	const [userData, setUserData] = useState({
 		firstName: "",
@@ -57,8 +59,7 @@ const InputDetails = ({ faceDescriptors }: { faceDescriptors: any }) => {
 				},
 			},
 		});
-		console.log("ERROR", error);
-		console.log("DATA", data);
+
 		if (error) {
 			openSnackbar(error.message, "error");
 			return;
@@ -72,6 +73,24 @@ const InputDetails = ({ faceDescriptors }: { faceDescriptors: any }) => {
 
 			if (error) {
 				openSnackbar(error.message, "error");
+				return;
+			}
+
+			const fp = await fpPromise;
+			const result = await fp.get();
+
+			const { error: errror2 } = await supabaseClient
+				.from("profile_devices")
+				.insert([
+					{
+						profile_id: data?.user?.id,
+						device_id: result.visitorId,
+						user_agent: navigator.userAgent,
+					},
+				]);
+
+			if (errror2) {
+				openSnackbar(errror2.message, "error");
 				return;
 			}
 
