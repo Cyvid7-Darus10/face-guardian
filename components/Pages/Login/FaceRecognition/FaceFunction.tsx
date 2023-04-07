@@ -159,10 +159,7 @@ const FaceFunction = () => {
 	};
 
 	const isCurrentDevicePresent = async (devices: any): Promise<boolean> => {
-		console.log("Device ID: ", deviceID);
-		console.log("devices: ", devices);
 		if (devices.includes(deviceID)) {
-			console.log("Device is registered");
 			return true;
 		} else {
 			toast("Device is not registered", {

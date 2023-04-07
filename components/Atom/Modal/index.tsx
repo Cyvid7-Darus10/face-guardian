@@ -25,7 +25,6 @@ export default function BasicModal({
 }) {
 	const handleClose = () => setOpen(false);
 	const handleDelete = () => {
-		console.log("delete");
 		toast("Deleted successfully", {
 			type: "success",
 			autoClose: 2000,
