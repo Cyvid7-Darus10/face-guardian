@@ -47,7 +47,7 @@ const InputDetails = () => {
 				type: "success",
 				autoClose: 2000,
 			});
-			console.log(data);
+
 			insertDeviceID(data?.user?.id as string, deviceID);
 
 			setTimeout(() => {
@@ -87,6 +87,11 @@ const InputDetails = () => {
 				autoClose: 2000,
 			});
 			return;
+		} else {
+			toast("Device ID inserted", {
+				type: "success",
+				autoClose: 2000,
+			});
 		}
 	};
 

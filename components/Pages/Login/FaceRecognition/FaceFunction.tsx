@@ -10,7 +10,6 @@ import ReplayIcon from "@mui/icons-material/Replay";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import * as Crypto from "crypto-js";
 import useDeviceID from "@/store/useDeviceID";
-import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 
 const videoConstraints = {
