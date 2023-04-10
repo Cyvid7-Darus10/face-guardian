@@ -24,13 +24,13 @@ const Face = ({
 			<FaceRecognition setFaceDescriptors={setFaceDescriptors} />
 			<div className="flex w-full gap-2 text-center items-center justify-center z-50 2xl:text-lg">
 				<Link
-					href="/"
+					href="/login"
 					className="cursor-pointer text-[#5f9cbf] hover:underline">
-					Home
+					Login using face?
 				</Link>
 				|
 				<Link
-					href="/login/email"
+					href="/login"
 					className="cursor-pointer text-[#5f9cbf] hover:underline">
 					Login using email?
 				</Link>
