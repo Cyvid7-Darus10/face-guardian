@@ -61,3 +61,27 @@ export async function createMatcher(faceProfile) {
 	);
 	return faceMatcher;
 }
+
+export function isSmiling(faceDescription) {
+	const landmarks = faceDescription.landmarks;
+	const mouthLeft = landmarks._positions[48];
+	const mouthRight = landmarks._positions[54];
+	const leftEye = landmarks._positions[36];
+	const rightEye = landmarks._positions[45];
+
+	const mouthDistance = faceapi.euclideanDistance(
+		[mouthLeft._x, mouthLeft._y],
+		[mouthRight._x, mouthRight._y]
+	);
+
+	const faceWidth = faceapi.euclideanDistance(
+		[leftEye._x, leftEye._y],
+		[rightEye._x, rightEye._y]
+	);
+
+	const smileThreshold = 0.6;
+
+	console.log(mouthDistance / faceWidth);
+
+	return mouthDistance / faceWidth > smileThreshold;
+}

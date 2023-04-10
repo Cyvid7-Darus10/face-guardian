@@ -4,6 +4,7 @@ import {
 	createMatcher,
 	getFullFaceDescription,
 	detectFace,
+	isSmiling,
 } from "@/utils/face";
 import { faceData } from "./faceData";
 import ReplayIcon from "@mui/icons-material/Replay";
@@ -82,8 +83,20 @@ const FaceFunction = ({ setFaceDescriptors }: { setFaceDescriptors: any }) => {
 			autoClose: 2000,
 		});
 
+		let smileCount = 0;
+		let isSmilingPrevious = false;
+		let isCameraReady = false;
+
 		while (true) {
 			if (webcamRef?.current) {
+				if (!isCameraReady && webcamRef.current.video.readyState === 4) {
+					isCameraReady = true;
+					toast("Camera is ready, please smile 3 times", {
+						type: "success",
+						autoClose: 2000,
+					});
+				}
+
 				const screenShot = webcamRef.current.getScreenshot();
 				if (screenShot) {
 					const result = await detectFace(screenShot);
@@ -93,13 +106,30 @@ const FaceFunction = ({ setFaceDescriptors }: { setFaceDescriptors: any }) => {
 							autoClose: 2000,
 						});
 					} else if (result.length === 1) {
-						setImageURL(screenShot);
-						toast("Face detected", {
-							type: "success",
-							autoClose: 2000,
-						});
-						handleImage(screenShot, fMatcher);
-						break; // exit the loop if a face is detected
+						const fullDesc = await getFullFaceDescription(screenShot);
+						const isUserSmiling =
+							fullDesc && fullDesc[0] && isSmiling(fullDesc[0]);
+
+						if (isUserSmiling && !isSmilingPrevious) {
+							isSmilingPrevious = true;
+							smileCount++;
+							toast(`Smile detected! (${smileCount}/3)`, {
+								type: "success",
+								autoClose: 2000,
+							});
+						} else if (!isUserSmiling) {
+							isSmilingPrevious = false;
+						}
+
+						if (smileCount === 3) {
+							setImageURL(screenShot);
+							toast("3 smiles detected, capturing image", {
+								type: "success",
+								autoClose: 2000,
+							});
+							handleImage(screenShot, fMatcher);
+							break; // exit the loop if 3 smiles are detected
+						}
 					}
 				}
 			}
