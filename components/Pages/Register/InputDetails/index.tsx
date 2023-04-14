@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 const InputDetails = ({ faceDescriptors }: { faceDescriptors: any }) => {
 	const supabaseClient = useSupabaseClient();
 	const fpPromise = FingerprintJS.load();
+	const [loading, setLoading] = useState(false);
 
 	const [userData, setUserData] = useState({
 		firstName: "",
@@ -21,6 +22,7 @@ const InputDetails = ({ faceDescriptors }: { faceDescriptors: any }) => {
 	});
 
 	const onSubmit = async () => {
+		setLoading(true);
 		if (!isEmail(userData.email)) {
 			toast("Please enter a valid email", {
 				type: "error",
@@ -132,6 +134,8 @@ const InputDetails = ({ faceDescriptors }: { faceDescriptors: any }) => {
 			});
 			return;
 		}
+
+		setLoading(false);
 	};
 
 	return (
@@ -149,6 +153,7 @@ const InputDetails = ({ faceDescriptors }: { faceDescriptors: any }) => {
 					onClick={onSubmit}
 					variant="contained"
 					color="primary"
+					disabled={loading}
 					className="bg-[#5f9cbf] hover:bg-[#ddf3ff] hover:text-[#5f9cbf] w-full ">
 					Create account
 				</Button>
