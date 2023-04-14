@@ -33,18 +33,41 @@ const insertFingerprint = async (
 	const result = await fp.get();
 	const deviceID = result.visitorId;
 
-	const { error: errror2 } = await supabaseClient
-		.from("profile_devices")
-		.insert([
-			{
-				profile_id: data?.user?.id,
-				device_id: deviceID,
-				user_agent: navigator.userAgent,
-			},
-		]);
+	const { error } = await supabaseClient.from("profile_devices").insert([
+		{
+			profile_id: data?.user?.id,
+			device_id: deviceID,
+			user_agent: navigator.userAgent,
+		},
+	]);
 
-	if (errror2) {
-		toast(errror2.message, {
+	if (error) {
+		toast(error.message, {
+			type: "error",
+			autoClose: 2000,
+		});
+		return;
+	}
+};
+
+const insertClientDetails = async (data: any, supabaseClient: any) => {
+	const randomString =
+		Math.random().toString(36).substring(2, 15) +
+		Math.random().toString(36).substring(2, 15);
+	const secretKey = Crypto.AES.encrypt(
+		randomString,
+		process.env.NEXT_PUBLIC_ENCRYPTION_KEY as string
+	).toString();
+
+	const { error } = await supabaseClient.from("clients").insert([
+		{
+			id: data?.user?.id,
+			secret_key: secretKey,
+		},
+	]);
+
+	if (error) {
+		toast(error.message, {
 			type: "error",
 			autoClose: 2000,
 		});
@@ -118,8 +141,11 @@ const registerUser = async (
 		});
 		return;
 	} else if (data) {
-		insertFaceDescriptors(data, faceDescriptors, supabaseClient);
-		insertFingerprint(data, supabaseClient, fpPromise);
+		Promise.all([
+			insertFaceDescriptors(data, faceDescriptors, supabaseClient),
+			insertFingerprint(data, supabaseClient, fpPromise),
+			insertClientDetails(data, supabaseClient),
+		]);
 
 		toast(
 			"Account created successfully. Please check your email for verification.",
