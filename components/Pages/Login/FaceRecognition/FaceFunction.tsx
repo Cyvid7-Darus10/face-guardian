@@ -189,7 +189,7 @@ const FaceFunction = () => {
 		if (devices.includes(deviceID)) {
 			return true;
 		} else {
-			toast("Device is not registered", {
+			toast("Device is not registered, login using email", {
 				type: "error",
 				autoClose: 2000,
 			});
