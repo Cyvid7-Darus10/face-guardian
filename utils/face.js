@@ -80,8 +80,5 @@ export function isSmiling(faceDescription) {
 	);
 
 	const smileThreshold = 0.6;
-
-	console.log(mouthDistance / faceWidth);
-
 	return mouthDistance / faceWidth > smileThreshold;
 }

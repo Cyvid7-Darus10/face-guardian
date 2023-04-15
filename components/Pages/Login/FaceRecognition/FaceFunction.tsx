@@ -54,11 +54,12 @@ const FaceFunction = () => {
 				let tempMatch = await temptDescriptors.map((descriptor: any) =>
 					fMatch.findBestMatch(descriptor)
 				);
+
 				if (tempMatch[0]._label !== "unknown") {
 					const userId = tempMatch[0]._label;
 					loginUser(userId);
 				} else {
-					toast("Login Failed", {
+					toast("User is not registered", {
 						type: "error",
 						autoClose: 2000,
 					});

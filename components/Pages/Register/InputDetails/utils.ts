@@ -1,4 +1,4 @@
-import * as Crypto from "crypto-js";
+import { encryptSecretKey, generateRandomString } from "@/utils/encryption";
 import { toast } from "react-toastify";
 import isEmail from "validator/lib/isEmail";
 import { passwordStrength } from "check-password-strength";
@@ -50,14 +50,18 @@ const insertFingerprint = async (
 	}
 };
 
-const insertClientDetails = async (data: any, supabaseClient: any) => {
-	const randomString =
-		Math.random().toString(36).substring(2, 15) +
-		Math.random().toString(36).substring(2, 15);
-	const secretKey = Crypto.AES.encrypt(
+type ClientData = {
+	user: {
+		id: string;
+	};
+};
+
+const insertClientDetails = async (data: ClientData, supabaseClient: any) => {
+	const randomString = generateRandomString(128);
+	const secretKey = encryptSecretKey(
 		randomString,
 		process.env.NEXT_PUBLIC_ENCRYPTION_KEY as string
-	).toString();
+	);
 
 	const { error } = await supabaseClient.from("clients").insert([
 		{
@@ -116,10 +120,10 @@ const registerUser = async (
 	fpPromise: any,
 	faceDescriptors: any
 ) => {
-	const encryptedPassword = Crypto.AES.encrypt(
+	const encryptedPassword = encryptSecretKey(
 		userData.password,
 		process.env.NEXT_PUBLIC_ENCRYPTION_KEY as string
-	).toString();
+	);
 
 	const { error, data } = await supabaseClient.auth.signUp({
 		email: userData.email,
@@ -131,8 +135,11 @@ const registerUser = async (
 				last_name: userData.lastName,
 				password: encryptedPassword,
 			},
+			captchaToken: userData.captchaToken,
 		},
 	});
+
+	console.log("TOKEN", userData.captchaToken);
 
 	if (error) {
 		toast(error.message, {
