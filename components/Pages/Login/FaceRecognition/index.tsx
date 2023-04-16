@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Webcam from "react-webcam";
 import FaceFunction from "./FaceFunction";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
+import { useRef } from "react";
 
 const FaceRecognition = () => {
 	const {
@@ -11,11 +13,13 @@ const FaceRecognition = () => {
 		ReplayIcon,
 		faceMatcher,
 		setImageURL,
+		captchaToken,
+		setCaptchaToken,
 	} = FaceFunction();
 
 	return (
 		<div className="flex flex-col items-center justify-center gap-5 w-[400px] h-[400px] bg-[#ddf3ff] p-2 shadow z-50">
-			{!imageURL && (
+			{!imageURL && captchaToken && (
 				<>
 					<Webcam
 						audio={false}
@@ -35,7 +39,7 @@ const FaceRecognition = () => {
 					/>
 				</>
 			)}
-			{imageURL && (
+			{imageURL && captchaToken && (
 				<>
 					<Image
 						src={imageURL}
@@ -53,6 +57,12 @@ const FaceRecognition = () => {
 						<ReplayIcon />
 					</button>
 				</>
+			)}
+			{!captchaToken && (
+				<HCaptcha
+					sitekey="10000000-ffff-ffff-ffff-000000000001"
+					onVerify={setCaptchaToken}
+				/>
 			)}
 		</div>
 	);

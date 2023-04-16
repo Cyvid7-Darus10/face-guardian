@@ -23,6 +23,7 @@ const FaceFunction = () => {
 	const webcamRef = useRef<any>(null);
 	const [imageURL, setImageURL] = useState<string | null>(null);
 	const [faceMatcher, setFaceMatcher] = useState<any>(null);
+	const [captchaToken, setCaptchaToken] = useState("");
 	const supabaseClient = useSupabaseClient();
 	const fpPromise = FingerprintJS.load();
 
@@ -32,11 +33,11 @@ const FaceFunction = () => {
 			const data = await faceData(supabaseClient);
 			const faceMatcher = await createMatcher(data);
 			setFaceMatcher(faceMatcher);
-			await capture(faceMatcher);
+			if (captchaToken) await capture(faceMatcher);
 		};
 		fetchData();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	}, [captchaToken]);
 
 	const handleImage = async (
 		image: string | null = imageURL,
@@ -74,7 +75,7 @@ const FaceFunction = () => {
 	};
 
 	const capture = async (fMatcher: any) => {
-		toast("Please wait for the camera to load", {
+		toast(captchaToken ? "Please wait..." : "Please complete the captcha", {
 			type: "info",
 			autoClose: 2000,
 		});
@@ -154,6 +155,9 @@ const FaceFunction = () => {
 			const { error } = await supabaseClient.auth.signInWithPassword({
 				email: data.email,
 				password: decipheredPassword,
+				options: {
+					captchaToken,
+				},
 			});
 
 			if (error) {
@@ -205,6 +209,8 @@ const FaceFunction = () => {
 		ReplayIcon,
 		faceMatcher,
 		setImageURL,
+		captchaToken,
+		setCaptchaToken,
 	};
 };
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Image from "next/image";
 import Button from "@mui/material/Button";
 import InputFields from "./components/InputFields";
@@ -6,14 +6,17 @@ import isEmail from "validator/lib/isEmail";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import { toast } from "react-toastify";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 const InputDetails = () => {
 	const supabaseClient = useSupabaseClient();
 	const fpPromise = FingerprintJS.load();
+	const captchaRef = useRef<any>(null);
 
 	const [userData, setUserData] = useState({
 		email: "",
 		password: "",
+		captchaToken: "",
 	});
 
 	const onSubmit = async () => {
@@ -34,6 +37,9 @@ const InputDetails = () => {
 		const { error, data } = await supabaseClient.auth.signInWithPassword({
 			email: userData.email,
 			password: userData.password,
+			options: {
+				captchaToken: userData.captchaToken,
+			},
 		});
 
 		if (error) {
@@ -41,7 +47,6 @@ const InputDetails = () => {
 				type: "error",
 				autoClose: 2000,
 			});
-			return;
 		} else if (data) {
 			toast("Login Successful", {
 				type: "success",
@@ -62,8 +67,13 @@ const InputDetails = () => {
 				type: "error",
 				autoClose: 2000,
 			});
-			return;
 		}
+
+		setUserData({
+			...userData,
+			captchaToken: "",
+		});
+		captchaRef.current.resetCaptcha();
 	};
 
 	const insertDeviceID = async (userID: string, deviceID: string) => {
@@ -110,6 +120,13 @@ const InputDetails = () => {
 			/>
 			<div className="flex flex-col items-center gap-5 w-full lg:w-1/2 p-5 lg:p-10 z-50">
 				<InputFields userData={userData} setUserData={setUserData} />
+				<HCaptcha
+					ref={captchaRef}
+					sitekey="10000000-ffff-ffff-ffff-000000000001"
+					onVerify={(token) =>
+						setUserData({ ...userData, captchaToken: token })
+					}
+				/>
 				<Button
 					onClick={onSubmit}
 					variant="contained"
