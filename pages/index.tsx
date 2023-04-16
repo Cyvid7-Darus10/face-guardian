@@ -53,7 +53,7 @@ const Home = () => {
 					<BasicModal title="Call to Action">
 						<div className="flex flex-col gap-2">
 							<li>
-								Learn more about our research: Discover the problem we're
+								Learn more about our research: Discover the problem we&apos;re
 								addressing, our proposed solution, and the methodology behind
 								our approach.
 							</li>
