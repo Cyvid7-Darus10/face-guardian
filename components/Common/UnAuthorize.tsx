@@ -10,11 +10,8 @@ const UnAuthorize = () => {
 					alt="fg-logo"
 					width={300}
 					height={300}
-					className="z-50 lg:w-[100px]"
+					className="z-50 w-[100px] fixed bottom-5 lg:top-5 lg:left-5"
 				/>
-				<p className="text-[35px] font-extrabold w-full text-center lg:text-left">
-					Face Guardian
-				</p>
 			</div>
 			<div className="flex flex-col items-center justify-center gap-5 bg-[#ddf3ff] p-10 shadow">
 				Unauthorized Access

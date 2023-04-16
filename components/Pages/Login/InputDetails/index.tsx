@@ -7,6 +7,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import { toast } from "react-toastify";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
+import Link from "next/link";
 
 const InputDetails = () => {
 	const supabaseClient = useSupabaseClient();
@@ -127,6 +128,19 @@ const InputDetails = () => {
 						setUserData({ ...userData, captchaToken: token })
 					}
 				/>
+				<div className="flex w-full gap-2 text-center items-center justify-center z-50 2xl:text-lg">
+					<Link
+						href="/register"
+						className="cursor-pointer text-[#5f9cbf] hover:underline">
+						Register
+					</Link>
+					|
+					<Link
+						href="/login"
+						className="cursor-pointer text-[#5f9cbf] hover:underline">
+						Login using face?
+					</Link>
+				</div>
 				<Button
 					onClick={onSubmit}
 					variant="contained"

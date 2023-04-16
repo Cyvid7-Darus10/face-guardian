@@ -15,11 +15,8 @@ const Face = ({
 					alt="fg-logo"
 					width={300}
 					height={300}
-					className="z-50 w-[100px]"
+					className="z-50 w-[100px] fixed bottom-5 lg:top-5 lg:left-5"
 				/>
-				<p className="text-[35px] font-extrabold w-full text-center lg:text-left">
-					Face Guardian
-				</p>
 			</div>
 			<FaceRecognition setFaceDescriptors={setFaceDescriptors} />
 			<div className="flex w-full gap-2 text-center items-center justify-center z-50 2xl:text-lg">
