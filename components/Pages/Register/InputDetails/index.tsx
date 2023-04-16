@@ -36,7 +36,7 @@ const InputDetails = ({ faceDescriptors }: { faceDescriptors: any }) => {
 				alt="fg-logo"
 				width={300}
 				height={300}
-				className="z-50 w-full lg:w-1/3"
+				className="z-50 max-w-[250px] lg:w-1/3 lg:max-w-full"
 			/>
 			<div className="flex flex-col gap-5 w-full lg:w-1/2 p-5 lg:p-10 z-50">
 				<InputFields userData={userData} setUserData={setUserData} />

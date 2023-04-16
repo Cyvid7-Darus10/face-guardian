@@ -15,7 +15,7 @@ const Face = ({
 					alt="fg-logo"
 					width={300}
 					height={300}
-					className="z-50 lg:w-[100px]"
+					className="z-50 w-[100px]"
 				/>
 				<p className="text-[35px] font-extrabold w-full text-center lg:text-left">
 					Face Guardian
