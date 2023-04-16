@@ -29,6 +29,10 @@ const FaceFunction = ({ setFaceDescriptors }: { setFaceDescriptors: any }) => {
 
 	useEffect(() => {
 		const fetchData = async () => {
+			toast("Algorithm initializing...", {
+				type: "info",
+				autoClose: 2000,
+			});
 			await loadModels();
 			const data = await faceData(supabaseClient);
 			const faceMatcher = await createMatcher(data);
