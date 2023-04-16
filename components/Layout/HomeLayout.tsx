@@ -1,8 +1,9 @@
 import { useEffect, ReactNode, useState } from "react";
 import Head from "next/head";
-import { useSession } from "@supabase/auth-helpers-react";
+import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import UnAuthorize from "../Common/UnAuthorize";
 import Navbar from "../Atom/Navbar";
+import useUserDataStore from "@/store/userDataStore";
 
 const HomeLayout = ({
 	children,
@@ -15,12 +16,34 @@ const HomeLayout = ({
 }) => {
 	const session = useSession();
 	const [restrictPage, setRestrictPage] = useState(true);
+	const { setUserData } = useUserDataStore();
+	const supabaseClient = useSupabaseClient();
 
 	useEffect(() => {
 		if (session?.user?.email && restrict) {
 			setRestrictPage(false);
 		}
 	}, [session, restrict]);
+
+	useEffect(() => {
+		const getUserData = async () => {
+			const { data, error } = await supabaseClient
+				.from("profiles")
+				.select("*, clients(secret_key)")
+				.eq("id", session?.user?.id as string)
+				.single();
+
+			if (error) {
+				console.error(error);
+				return;
+			} else if (data) {
+				setUserData(data);
+			}
+		};
+
+		getUserData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [session]);
 
 	return (
 		<>
