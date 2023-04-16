@@ -9,15 +9,15 @@ const Face = ({
 }) => {
 	return (
 		<div className="flex flex-col items-center gap-10 w-full lg:w-1/2 p-5 lg:p-10 z-50 mx-auto">
-			<div className="flex flex-col items-center">
+			<Link className="flex flex-col items-center" href="/">
 				<Image
 					src="/fg-logo.png"
 					alt="fg-logo"
 					width={300}
 					height={300}
-					className="z-50 w-[100px] fixed bottom-5 lg:top-5 lg:left-5"
+					className="z-50 w-[75px] fixed bottom-5 lg:top-5 lg:left-5"
 				/>
-			</div>
+			</Link>
 			<FaceRecognition setFaceDescriptors={setFaceDescriptors} />
 			<div className="flex w-full gap-2 text-center items-center justify-center z-50 2xl:text-lg">
 				<Link
