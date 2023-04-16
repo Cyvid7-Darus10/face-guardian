@@ -2,6 +2,7 @@ import ParticleLayout from "../components/Layout/ParticleLayout";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import Link from "next/link";
 import Image from "next/image";
+import BasicModal from "@/components/Atom/BasicModal";
 
 const Home = () => {
 	return (
@@ -11,26 +12,66 @@ const Home = () => {
 					<p className="text-[35px] font-extrabold w-full text-center lg:text-left">
 						Welcome to Face Guardian!
 					</p>
-					<p className="leading-[30px] text-[20px]">
-						{`
-						We're thrilled to have you join our community. To get started,
-						please let our algorithm scan your face. This will make sure that
-						you are a unique user before proceeding with the registration
-						process. `}
+					<p className="text-[20px] w-full text-center lg:text-left">
+						Revolutionizing Online Authentication for a Safer and More
+						Convenient User Experience
 					</p>
-					<p className="leading-[30px] text-[20px]">
-						{`
-					Once you've completed the registration form, we'll send you
-						a verification email to the email address you provided. Please click
-						on the verification link in this email to confirm your account and
-						complete the registration process.`}
-					</p>
-					<p className="leading-[30px] text-[20px]">
-						{`
-						After you've confirmed your
-						account, you'll be able to access all of the features and
-						functionality of Face Guardian.`}
-					</p>
+					<BasicModal title="About">
+						<div className="leading-[25px]">
+							A novel authentication approach that combines cutting-edge facial
+							recognition technology with the OAuth 2.0 protocol. This
+							innovative solution addresses the prevalent issue of fake accounts
+							and strengthens online security, while offering a seamless user
+							experience. By enabling third-party accessibility, our system is
+							easy to integrate across various platforms and services, providing
+							a more secure and efficient alternative to traditional
+							authentication methods.
+						</div>
+					</BasicModal>
+					<BasicModal title="Features">
+						<div className="flex flex-col gap-2">
+							<li>
+								Facial recognition using the Histogram of Oriented Gradients
+								(HOG) algorithm and dlib library
+							</li>
+							<li>
+								OAuth 2.0 integration for compatibility with third-party
+								platforms
+							</li>
+							<li>
+								Secure token-based user authentication and device fingerprinting
+							</li>
+							<li>
+								Real-time facial recognition for enhanced security and
+								authentication
+							</li>
+							<li>
+								Open-source codebase for easy integration and customization
+							</li>
+						</div>
+					</BasicModal>
+					<BasicModal title="Call to Action">
+						<div className="flex flex-col gap-2">
+							<li>
+								Learn more about our research: Discover the problem we're
+								addressing, our proposed solution, and the methodology behind
+								our approach.
+							</li>
+							<li>
+								Explore our results and evaluation: Gain insights into the
+								usability testing, security assessment, performance evaluation,
+								and OAuth protocol compatibility testing of our system.
+							</li>
+							<li>
+								Download the full research paper: Access our complete study for
+								an in-depth understanding of our novel authentication system.
+							</li>
+							<li>
+								Contact us: Get in touch with our team to share your thoughts,
+								ask questions, or collaborate on future projects.
+							</li>
+						</div>
+					</BasicModal>
 					<div className="flex flex-row gap-2 text-white text-center">
 						<Link
 							href="/register/intro"
