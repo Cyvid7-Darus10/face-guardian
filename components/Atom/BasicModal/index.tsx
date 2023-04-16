@@ -4,11 +4,13 @@ import { Fragment, useState } from "react";
 export default function BasicModal({
 	title,
 	children,
+	open = false,
 }: {
 	title: string;
 	children: any;
+	open?: boolean;
 }) {
-	let [isOpen, setIsOpen] = useState(false);
+	let [isOpen, setIsOpen] = useState(open);
 
 	function closeModal() {
 		setIsOpen(false);
@@ -50,7 +52,7 @@ export default function BasicModal({
 								leave="ease-in duration-200"
 								leaveFrom="opacity-100 scale-100"
 								leaveTo="opacity-0 scale-95">
-								<Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+								<Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
 									<Dialog.Title
 										as="h3"
 										className="text-lg font-medium leading-6 text-gray-900">

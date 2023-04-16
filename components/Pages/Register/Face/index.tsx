@@ -1,6 +1,7 @@
 import Image from "next/image";
 import FaceRecognition from "../FaceRecognition";
 import Link from "next/link";
+import Intro from "@/components/Pages/Register/Intro";
 
 const Face = ({
 	setFaceDescriptors,
@@ -9,6 +10,9 @@ const Face = ({
 }) => {
 	return (
 		<div className="flex flex-col items-center gap-10 w-full lg:w-1/2 p-5 lg:p-10 z-50 mx-auto">
+			<span className="hidden">
+				<Intro />
+			</span>
 			<Link className="flex flex-col items-center" href="/">
 				<Image
 					src="/fg-logo.png"

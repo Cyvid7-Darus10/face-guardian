@@ -74,7 +74,7 @@ const Home = () => {
 					</BasicModal>
 					<div className="flex flex-row gap-2 text-white text-center">
 						<Link
-							href="/register/intro"
+							href="/register"
 							className="bg-[#5f9cbf] hover:bg-[#ddf3ff] hover:text-[#5f9cbf] w-full lg:w-1/2 m-auto p-2 rounded-md">
 							<RocketLaunchIcon />
 							Register
