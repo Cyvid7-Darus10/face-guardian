@@ -1,5 +1,5 @@
-import InputDetails from "../../components/Pages/Login/InputDetails";
-import ParticleLayout from "../../components/Layout/ParticleLayout";
+import InputDetails from "@/components/Pages/Login/InputDetails";
+import ParticleLayout from "@/components/Layout/ParticleLayout";
 
 const Register = () => {
 	return (
