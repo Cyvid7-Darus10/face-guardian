@@ -97,7 +97,7 @@ const FaceFunction = ({ setFaceDescriptors }: { setFaceDescriptors: any }) => {
 					isCameraReady = true;
 					toast("Camera is ready, please smile 3 times", {
 						type: "success",
-						autoClose: 2000,
+						autoClose: 5000,
 					});
 				}
 
