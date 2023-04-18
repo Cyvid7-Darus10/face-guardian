@@ -3,8 +3,6 @@ import { registerRoute } from "workbox-routing";
 import { CacheFirst, StaleWhileRevalidate } from "workbox-strategies";
 import { ExpirationPlugin } from "workbox-expiration";
 
-declare const self: ServiceWorkerGlobalScope;
-
 precacheAndRoute(self.__WB_MANIFEST);
 
 registerRoute(

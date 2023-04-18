@@ -5,8 +5,8 @@ module.exports = {
 		if (!isServer && !dev) {
 			config.plugins.push(
 				new InjectManifest({
-					swSrc: "./pages/service-worker.ts",
-					swDest: "service-worker.ts",
+					swSrc: "./sw/service-worker.js", // Update this path to point to the compiled file
+					swDest: "service-worker.js",
 					exclude: [/\.map$/, /asset-manifest\.json$/],
 				})
 			);
@@ -16,7 +16,7 @@ module.exports = {
 	async headers() {
 		return [
 			{
-				source: "/service-worker.ts",
+				source: "/service-worker.js",
 				headers: [
 					{
 						key: "Cache-Control",
