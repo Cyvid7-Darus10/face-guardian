@@ -1,7 +1,7 @@
-import { precacheAndRoute } from "workbox-precaching";
-import { registerRoute } from "workbox-routing";
-import { CacheFirst, StaleWhileRevalidate } from "workbox-strategies";
-import { ExpirationPlugin } from "workbox-expiration";
+const { precacheAndRoute } = require("workbox-precaching");
+const { registerRoute } = require("workbox-routing");
+const { CacheFirst, StaleWhileRevalidate } = require("workbox-strategies");
+const { ExpirationPlugin } = require("workbox-expiration");
 
 precacheAndRoute(self.__WB_MANIFEST);
 
