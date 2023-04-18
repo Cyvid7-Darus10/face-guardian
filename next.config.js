@@ -5,7 +5,7 @@ module.exports = {
 		if (!isServer && !dev) {
 			config.plugins.push(
 				new InjectManifest({
-					swSrc: "./utils/service-worker.js",
+					swSrc: "./pages/service-worker.js",
 					swDest: "service-worker.js",
 					exclude: [/\.map$/, /asset-manifest\.json$/],
 				})
