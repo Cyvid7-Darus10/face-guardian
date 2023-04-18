@@ -1,3 +1,5 @@
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
 const { precacheAndRoute } = require("workbox-precaching");
 const { registerRoute } = require("workbox-routing");
 const { CacheFirst, StaleWhileRevalidate } = require("workbox-strategies");
