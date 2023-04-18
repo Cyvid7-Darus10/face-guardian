@@ -54,11 +54,7 @@ const InputDetails = () => {
 				autoClose: 2000,
 			});
 
-			const fp = await fpPromise;
-			const result = await fp.get();
-			const deviceID = result.visitorId;
-
-			insertDeviceID(data?.user?.id as string, deviceID);
+			await insertDeviceID(data?.user?.id as string);
 
 			setTimeout(() => {
 				window.location.href = "/home";
@@ -77,7 +73,11 @@ const InputDetails = () => {
 		captchaRef.current.resetCaptcha();
 	};
 
-	const insertDeviceID = async (userID: string, deviceID: string) => {
+	const insertDeviceID = async (userID: string) => {
+		const fp = await fpPromise;
+		const result = await fp.get();
+		const deviceID = result.visitorId;
+
 		const { data } = await supabaseClient
 			.from("profile_devices")
 			.select("*")

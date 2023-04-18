@@ -2,14 +2,16 @@ import * as faceapi from "face-api.js";
 
 // Load models and weights
 export async function loadModels() {
-	await faceapi.loadTinyFaceDetectorModel("/models");
-	await faceapi.loadFaceLandmarkTinyModel("/models");
-	await faceapi.loadFaceRecognitionModel("/models");
+	await Promise.all([
+		faceapi.loadTinyFaceDetectorModel("/models"),
+		faceapi.loadFaceLandmarkTinyModel("/models"),
+		faceapi.loadFaceRecognitionModel("/models"),
+	]);
 }
 
-export async function getFullFaceDescription(blob, inputSize = 512) {
+export async function getFullFaceDescription(blob, inputSize = 800) {
 	// tiny_face_detector options
-	let scoreThreshold = 0.5;
+	let scoreThreshold = 0.6;
 	const OPTION = new faceapi.TinyFaceDetectorOptions({
 		inputSize,
 		scoreThreshold,

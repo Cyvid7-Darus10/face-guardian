@@ -39,38 +39,27 @@ const FaceFunction = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [captchaToken]);
 
-	const handleImage = async (
-		image: string | null = imageURL,
-		fMatch: any = faceMatcher
-	) => {
-		if (image) {
-			let temptDescriptors: any = [];
-			await getFullFaceDescription(image).then((fullDesc) => {
-				if (fullDesc) {
-					temptDescriptors = fullDesc.map((fd: any) => fd.descriptor);
-				}
-			});
+	const handleImage = async (descriptor: any, fMatch: any = faceMatcher) => {
+		const temptDescriptors = descriptor.map((fd: any) => fd.descriptor);
+		if (temptDescriptors.length > 0 && fMatch) {
+			let tempMatch = await temptDescriptors.map((descriptor: any) =>
+				fMatch.findBestMatch(descriptor)
+			);
 
-			if (temptDescriptors.length > 0 && fMatch) {
-				let tempMatch = await temptDescriptors.map((descriptor: any) =>
-					fMatch.findBestMatch(descriptor)
-				);
-
-				if (tempMatch[0]._label !== "unknown") {
-					const userId = tempMatch[0]._label;
-					loginUser(userId);
-				} else {
-					toast("User is not registered", {
-						type: "error",
-						autoClose: 2000,
-					});
-				}
+			if (tempMatch[0]._label !== "unknown") {
+				const userId = tempMatch[0]._label;
+				loginUser(userId);
 			} else {
-				toast("Login Failed", {
+				toast("User is not registered", {
 					type: "error",
 					autoClose: 2000,
 				});
 			}
+		} else {
+			toast("Login Failed. Try Again.", {
+				type: "error",
+				autoClose: 2000,
+			});
 		}
 	};
 
@@ -120,7 +109,7 @@ const FaceFunction = () => {
 
 						if (smileCount === 1) {
 							setImageURL(screenShot);
-							handleImage(screenShot, fMatcher);
+							handleImage(fullDesc, fMatcher);
 							break; // exit the loop if 3 smiles are detected
 						}
 					}
@@ -171,12 +160,8 @@ const FaceFunction = () => {
 					type: "success",
 					autoClose: 2000,
 				});
-
-				setTimeout(() => {
-					window.location.href = "/home";
-				}, 2000);
 			} else {
-				toast("Login Failed", {
+				toast("Login Failed.", {
 					type: "error",
 					autoClose: 2000,
 				});
@@ -189,7 +174,6 @@ const FaceFunction = () => {
 		const fp = await fpPromise;
 		const result = await fp.get();
 		const deviceID = result.visitorId;
-
 		if (devices.includes(deviceID)) {
 			return true;
 		} else {

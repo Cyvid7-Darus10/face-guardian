@@ -2,6 +2,7 @@ import { useEffect, ReactNode, useState } from "react";
 import Head from "next/head";
 import { useSession } from "@supabase/auth-helpers-react";
 import Particle from "../Common/Particles";
+import { useRouter } from "next/router";
 
 const ParticleLayout = ({
 	children,
@@ -14,10 +15,11 @@ const ParticleLayout = ({
 }) => {
 	const session = useSession();
 	const [restrictPage, setRestrictPage] = useState(true);
+	const router = useRouter();
 
 	useEffect(() => {
 		if (session?.user?.email && restrict) {
-			window.location.href = "/home";
+			router.push("/home");
 		} else {
 			setRestrictPage(false);
 		}

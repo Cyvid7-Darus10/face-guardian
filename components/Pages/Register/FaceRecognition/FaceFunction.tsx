@@ -11,10 +11,6 @@ import ReplayIcon from "@mui/icons-material/Replay";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { toast } from "react-toastify";
 
-interface Match {
-	_label: string;
-}
-
 const videoConstraints = {
 	width: 720,
 	height: 720,

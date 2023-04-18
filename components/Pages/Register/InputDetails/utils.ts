@@ -139,8 +139,6 @@ const registerUser = async (
 		},
 	});
 
-	console.log("TOKEN", userData.captchaToken);
-
 	if (error) {
 		toast(error.message, {
 			type: "error",
