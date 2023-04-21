@@ -9,7 +9,7 @@ export async function loadModels() {
 	]);
 }
 
-export async function getFullFaceDescription(blob, inputSize = 800) {
+export async function getFullFaceDescription(blob, inputSize = 512) {
 	// tiny_face_detector options
 	let scoreThreshold = 0.6;
 	const OPTION = new faceapi.TinyFaceDetectorOptions({

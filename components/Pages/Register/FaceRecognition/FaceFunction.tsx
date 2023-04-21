@@ -12,8 +12,8 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { toast } from "react-toastify";
 
 const videoConstraints = {
-	width: 720,
-	height: 720,
+	width: 480,
+	height: 480,
 	facingMode: "user",
 };
 
@@ -133,7 +133,7 @@ const FaceFunction = ({ setFaceDescriptors }: { setFaceDescriptors: any }) => {
 					}
 				}
 			}
-			await new Promise((resolve) => setTimeout(resolve, 100)); // wait for 100ms before trying again
+			await new Promise((resolve) => setTimeout(resolve, 200)); // wait for 100ms before trying again
 		}
 	};
 

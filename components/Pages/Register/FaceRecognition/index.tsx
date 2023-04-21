@@ -23,17 +23,17 @@ const FaceRecognition = ({
 				<>
 					<Webcam
 						audio={false}
-						height={720}
+						height={480}
 						ref={webcamRef}
 						screenshotFormat="image/jpeg"
-						width={720}
+						width={480}
 						videoConstraints={videoConstraints}
 						mirrored={true}
 					/>
 					<Image
 						src="/face-guide.png"
-						width={1000}
-						height={1000}
+						width={480}
+						height={480}
 						alt="face-guide"
 						className="z-50 w-[300px] h-[300px] absolute opacity-60"
 					/>

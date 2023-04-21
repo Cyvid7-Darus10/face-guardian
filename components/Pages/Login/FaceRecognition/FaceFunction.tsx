@@ -14,8 +14,8 @@ import { toast } from "react-toastify";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 
 const videoConstraints = {
-	width: 720,
-	height: 720,
+	width: 480,
+	height: 480,
 	facingMode: "user",
 };
 
@@ -115,7 +115,7 @@ const FaceFunction = () => {
 					}
 				}
 			}
-			await new Promise((resolve) => setTimeout(resolve, 100)); // wait for 100ms before trying again
+			await new Promise((resolve) => setTimeout(resolve, 250)); // wait for 100ms before trying again
 		}
 	};
 
