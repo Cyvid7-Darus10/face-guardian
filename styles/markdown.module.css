@@ -1,0 +1,25 @@
+/* styles/markdown.module.css */
+.markdown h1 {
+	font-size: 2rem;
+	font-weight: bold;
+	margin: 1rem 0;
+}
+
+.markdown h2 {
+	font-size: 1.5rem;
+	font-weight: bold;
+	margin: 1rem 0;
+}
+
+.markdown h3 {
+	font-size: 1.25rem;
+	font-weight: bold;
+	margin: 1rem 0;
+}
+
+.markdown p {
+	font-size: 1rem;
+	margin: 1rem 0;
+}
+
+/* Add more styles for other markdown elements as needed */
