@@ -2,7 +2,6 @@ import Image from "next/image";
 import Webcam from "react-webcam";
 import FaceFunction from "./FaceFunction";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
-import { useRef } from "react";
 
 const FaceRecognition = () => {
 	const {

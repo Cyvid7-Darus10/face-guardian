@@ -25,7 +25,7 @@ const InputDetails = ({ faceDescriptors }: { faceDescriptors: any }) => {
 		setLoading(true);
 		if (!checkInputFields(userData)) return;
 		await registerUser(userData, supabaseClient, fpPromise, faceDescriptors);
-		captchaRef.current.resetCaptcha();
+		captchaRef?.current?.resetCaptcha();
 		setLoading(false);
 	};
 

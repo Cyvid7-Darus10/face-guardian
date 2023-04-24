@@ -70,7 +70,7 @@ const InputDetails = () => {
 			...userData,
 			captchaToken: "",
 		});
-		captchaRef.current.resetCaptcha();
+		captchaRef?.current?.resetCaptcha();
 	};
 
 	const insertDeviceID = async (userID: string) => {
