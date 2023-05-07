@@ -11,7 +11,7 @@ interface IFormInput {
 	redirectTo: string;
 }
 
-const AppCreation = () => {
+const AppCreation = ({ setAppList }: { setAppList: any }) => {
 	const {
 		register,
 		formState: { errors },
@@ -23,14 +23,16 @@ const AppCreation = () => {
 	let [isModalOpen, setIsModalOpen] = useState(false);
 
 	const onSubmit: SubmitHandler<IFormInput> = async (appData) => {
-		const { error } = await supabaseClient.from("apps").insert([
-			{
-				name: appData.name,
-				domain: appData.domain,
-				redirect_to: appData.redirectTo,
-				client_id: userData.id,
-			},
-		]);
+		const appDataList = {
+			name: appData.name,
+			domain: appData.domain,
+			redirect_to: appData.redirectTo,
+			client_id: userData.id,
+		};
+
+		const { error, data } = await supabaseClient
+			.from("apps")
+			.insert([appDataList]);
 
 		if (error) {
 			toast.error("Error creating app");
@@ -38,6 +40,8 @@ const AppCreation = () => {
 			return;
 		} else {
 			toast.success("App created successfully");
+			const randomId = Math.floor(Math.random() * 1000);
+			setAppList((prev: any) => [...prev, { ...appDataList, id: randomId }]);
 			setIsModalOpen(false);
 		}
 	};
