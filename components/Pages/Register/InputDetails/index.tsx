@@ -12,6 +12,10 @@ const InputDetails = ({ faceDescriptors }: { faceDescriptors: any }) => {
 	const fpPromise = FingerprintJS.load();
 	const [loading, setLoading] = useState(false);
 	const captchaRef = useRef<any>(null);
+	const siteKey =
+		process.env.NODE_ENV === "production"
+			? "2cab0044-4c12-4815-ab94-7f4ed9f3c8d4"
+			: "10000000-ffff-ffff-ffff-000000000001";
 
 	const [userData, setUserData] = useState({
 		firstName: "",
@@ -42,7 +46,7 @@ const InputDetails = ({ faceDescriptors }: { faceDescriptors: any }) => {
 				<InputFields userData={userData} setUserData={setUserData} />
 				<HCaptcha
 					ref={captchaRef}
-					sitekey="10000000-ffff-ffff-ffff-000000000001"
+					sitekey={siteKey}
 					onVerify={(token) =>
 						setUserData({ ...userData, captchaToken: token })
 					}
