@@ -16,6 +16,11 @@ const FaceRecognition = () => {
 		setCaptchaToken,
 	} = FaceFunction();
 
+	const siteKey =
+		process.env.NODE_ENV === "production"
+			? "2cab0044-4c12-4815-ab94-7f4ed9f3c8d4"
+			: "10000000-ffff-ffff-ffff-000000000001";
+
 	return (
 		<div className="flex flex-col items-center justify-center gap-5 w-[400px] h-[400px] bg-[#ddf3ff] p-2 shadow z-50">
 			{!imageURL && captchaToken && (
@@ -58,10 +63,7 @@ const FaceRecognition = () => {
 				</>
 			)}
 			{!captchaToken && (
-				<HCaptcha
-					sitekey="10000000-ffff-ffff-ffff-000000000001"
-					onVerify={setCaptchaToken}
-				/>
+				<HCaptcha sitekey={siteKey} onVerify={setCaptchaToken} />
 			)}
 		</div>
 	);
