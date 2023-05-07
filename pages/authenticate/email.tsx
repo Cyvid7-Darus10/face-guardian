@@ -1,12 +1,12 @@
-import Face from "@/components/Pages/Login/Face";
+import InputDetails from "@/components/Pages/Login/InputDetails";
 import ParticleLayout from "@/components/Layout/ParticleLayout";
 
-const Login = () => {
+const Register = () => {
 	return (
 		<ParticleLayout title="Login" restrict={true}>
-			<Face />
+			<InputDetails />
 		</ParticleLayout>
 	);
 };
 
-export default Login;
+export default Register;
