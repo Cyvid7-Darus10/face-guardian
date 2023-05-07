@@ -1,6 +1,6 @@
 import Disclosure from "@/components/Atom/Disclosure";
-import Markdown from "./Markdown";
-import { installation, usage } from "./markdownContents";
+import Markdown from "./components/Markdown";
+import { installation, usage } from "./components/markdownContents";
 
 const UserGuide = () => {
 	return (
