@@ -1,6 +1,4 @@
-export const installation = `# Face Guardian Package
-[**Live Demo**](https://cyvid7-darus10.github.io/face-guardian-npm/)
-
+export const installation = `
 ## Installation:
 
 bash
@@ -11,8 +9,9 @@ or
 
 bash
 yarn add -D face-guardian
+`;
 
-
+export const usage = `
 ## Usage :
 
 Add \`FaceLogin\` to your component:
