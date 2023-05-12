@@ -59,7 +59,7 @@ export default function AppCreationModal({
 										{title}
 									</Dialog.Title>
 									<div className="mt-2">
-										<p className="text-sm text-gray-500">{children}</p>
+										<div className="text-sm text-gray-500">{children}</div>
 									</div>
 								</Dialog.Panel>
 							</Transition.Child>

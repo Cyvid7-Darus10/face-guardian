@@ -31,7 +31,7 @@ const AppList = () => {
 	}, [supabaseClient, userData]);
 
 	return (
-		<div className="flex flex-row items-start mt-5 w-full gap-5">
+		<div className="flex flex-row items-start w-full gap-5">
 			{appList && (
 				<Sidebar
 					appLists={appList}

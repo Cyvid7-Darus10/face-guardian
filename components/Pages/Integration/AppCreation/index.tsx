@@ -30,18 +30,17 @@ const AppCreation = ({ setAppList }: { setAppList: any }) => {
 			client_id: userData.id,
 		};
 
-		const { error, data } = await supabaseClient
+		const { data, error } = await supabaseClient
 			.from("apps")
-			.insert([appDataList]);
+			.insert([appDataList])
+			.select();
 
 		if (error) {
 			toast.error("Error creating app");
 			console.error(error);
 			return;
 		} else {
-			toast.success("App created successfully");
-			const randomId = Math.floor(Math.random() * 1000);
-			setAppList((prev: any) => [...prev, { ...appDataList, id: randomId }]);
+			setAppList((prev: any) => [...prev, data[0]]);
 			setIsModalOpen(false);
 		}
 	};

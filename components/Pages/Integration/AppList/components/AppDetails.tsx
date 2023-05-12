@@ -3,6 +3,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { toast } from "react-toastify";
 import ConfirmationModal from "@/components/Atom/ConfirmationModal";
+import HiddenInput from "@/components/Atom/HiddenInput";
 
 interface IFormInput {
 	name: string;
@@ -88,8 +89,14 @@ const AppDetails = ({
 	};
 
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} className="w-full border-l pl-4">
+		<form
+			onSubmit={handleSubmit(onSubmit)}
+			className="w-full border-l pl-4 h-full">
 			<div className="flex flex-col text-[16px] font-[400] gap-5">
+				<div className="text-left w-full">
+					<label htmlFor="firstName">Name</label>
+					<HiddenInput content={selectedApp?.id} />
+				</div>
 				<div className="text-left w-full">
 					<label htmlFor="firstName">Name</label>
 					<input
