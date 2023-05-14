@@ -16,10 +16,7 @@ const FaceRecognition = () => {
 		setCaptchaToken,
 	} = FaceFunction();
 
-	const siteKey =
-		process.env.NODE_ENV === "production"
-			? "20000000-ffff-ffff-ffff-000000000002"
-			: "20000000-ffff-ffff-ffff-000000000002";
+	const siteKey = "20000000-ffff-ffff-ffff-000000000002";
 
 	return (
 		<div className="flex flex-col items-center justify-center gap-5 w-[400px] h-[400px] bg-[#ddf3ff] p-2 shadow z-50">

@@ -14,7 +14,6 @@ const Face = ({ appData }: { appData?: any }) => {
 					className="z-50 w-[75px] fixed bottom-5 lg:top-5 lg:left-5"
 				/>
 			</Link>
-
 			{appData && (
 				<div className="flex flex-col items-center justify-center gap-5 p-2 shadow z-50">
 					<p className="text-center text-dark text-xl">
