@@ -1,7 +1,7 @@
 import { useEffect, ReactNode, useState } from "react";
 import Head from "next/head";
 import { useSession } from "@supabase/auth-helpers-react";
-import Particle from "../Common/Particles";
+// import Particle from "../Common/Particles";
 import { useRouter } from "next/router";
 
 const ParticleLayout = ({
@@ -63,7 +63,7 @@ const ParticleLayout = ({
 				<title>{title ? `${title} | Face Guardian` : "Face Guardian"}</title>
 			</Head>
 			<div className="select-none">
-				<Particle />
+				{/* <Particle /> */}
 				<div className="max-w-[1440px] mx-auto">
 					{!restrictPage && children}
 				</div>
