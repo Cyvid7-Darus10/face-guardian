@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import FaceRecognition from "../FaceRecognition";
 
-const Face = ({ appData }: { appData: any }) => {
+const Face = ({ appData }: { appData?: any }) => {
 	return (
 		<div className="flex flex-col items-center gap-10 w-full lg:w-[800px] p-5 lg:p-10 z-50 mx-auto">
 			<Link className="flex flex-col items-center" href="/">
