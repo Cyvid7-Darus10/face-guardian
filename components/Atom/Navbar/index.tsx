@@ -13,7 +13,7 @@ import userDataStore from "@/store/userDataStore";
 
 const navigation = [
 	{ name: "Home", href: "/home" },
-	{ name: "Integration", href: "/integration" },
+	{ name: "Integration", href: "/integration/api" },
 ];
 
 function classNames(...classes: string[]) {

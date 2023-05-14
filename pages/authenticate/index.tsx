@@ -4,27 +4,25 @@ import { withIronSessionSsr } from "iron-session/next";
 import { sessionOptions } from "@/utils/session";
 
 type Props = {
-	clientId: string;
-	clientSecret: string;
+	clientData: any;
+	appData: any;
 };
 
-const Authenticate = ({ clientId, clientSecret }: Props): JSX.Element => {
-	console.log(clientId, clientSecret, "KEYS");
+const Authenticate = ({ clientData, appData }: Props): JSX.Element => {
+	console.log("clientData", clientData);
+	console.log("appData", appData);
+
 	return (
 		<ParticleLayout title="Authenticate" restrict={true}>
-			<Face />
+			<Face appData={appData} />
 		</ParticleLayout>
 	);
 };
 
-export const getServerSideProps = withIronSessionSsr(async function ({
-	req,
-	res,
-}) {
-	const clientId = req.session.clientId || null;
-	const clientSecret = req.session.clientSecret || null;
-
-	if (!clientId || !clientSecret) {
+export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
+	const appData = req.session.appData || null;
+	const clientData = req.session.clientData || null;
+	if (!appData || !clientData) {
 		return {
 			redirect: {
 				permanent: false,
@@ -35,11 +33,10 @@ export const getServerSideProps = withIronSessionSsr(async function ({
 
 	return {
 		props: {
-			clientId,
-			clientSecret,
+			appData,
+			clientData,
 		},
 	};
-},
-sessionOptions);
+}, sessionOptions);
 
 export default Authenticate;
