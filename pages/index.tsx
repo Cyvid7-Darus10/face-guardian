@@ -90,8 +90,8 @@ const Home = () => {
 				<Image
 					src="/fg-logo.png"
 					alt="fg-logo"
-					width={300}
-					height={300}
+					width={150}
+					height={150}
 					className="z-50 max-w-[250px] lg:w-1/3 lg:max-w-full"
 				/>
 			</div>
