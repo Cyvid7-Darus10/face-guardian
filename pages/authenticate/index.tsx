@@ -3,17 +3,9 @@ import ParticleLayout from "@/components/Layout/ParticleLayout";
 import { withIronSessionSsr } from "iron-session/next";
 import { sessionOptions } from "@/utils/session";
 
-type Props = {
-	clientData: any;
-	appData: any;
-};
-
-const Authenticate = ({ clientData, appData }: Props): JSX.Element => {
-	console.log("clientData", clientData);
-	console.log("appData", appData);
-
+const Authenticate = ({ appData }: { appData?: any }): JSX.Element => {
 	return (
-		<ParticleLayout title="Authenticate" restrict={true}>
+		<ParticleLayout title="Authenticate" restrict={true} appData={appData}>
 			<Face appData={appData} />
 		</ParticleLayout>
 	);
@@ -21,8 +13,7 @@ const Authenticate = ({ clientData, appData }: Props): JSX.Element => {
 
 export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
 	const appData = req.session.appData || null;
-	const clientData = req.session.clientData || null;
-	if (!appData || !clientData) {
+	if (!appData) {
 		return {
 			redirect: {
 				permanent: false,
@@ -34,7 +25,6 @@ export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
 	return {
 		props: {
 			appData,
-			clientData,
 		},
 	};
 }, sessionOptions);

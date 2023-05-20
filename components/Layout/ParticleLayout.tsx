@@ -1,30 +1,80 @@
 import { useEffect, ReactNode, useState } from "react";
 import Head from "next/head";
 import { useSession } from "@supabase/auth-helpers-react";
-// import Particle from "../Common/Particles";
 import { useRouter } from "next/router";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { generateRandomString } from "@/utils/encryption";
+import { convertToLink } from "@/utils/convertToLink";
+
+interface ParticleLayoutProps {
+	children: ReactNode;
+	title?: string;
+	restrict?: boolean;
+	appData?: any;
+}
 
 const ParticleLayout = ({
 	children,
 	title,
 	restrict,
-}: {
-	children: ReactNode;
-	title?: string;
-	restrict?: boolean;
-}) => {
+	appData,
+}: ParticleLayoutProps) => {
 	const session = useSession();
 	const [restrictPage, setRestrictPage] = useState(true);
 	const router = useRouter();
+	const supabaseClient = useSupabaseClient();
 
 	useEffect(() => {
-		if (session?.user?.email && restrict) {
-			router.push("/home");
-		} else {
-			setRestrictPage(false);
-		}
+		const createAuthCodeAndRedirect = async () => {
+			if (session?.user?.email && restrict) {
+				const { redirect_to, id } = appData || {};
+				if (redirect_to && id) {
+					const redirectLink = convertToLink(redirect_to);
+					const authorizationCode = generateRandomString(30);
+					const profileId = session.user.id;
+
+					const { error } = await supabaseClient
+						.from("authorization_codes")
+						.insert([
+							{
+								code: authorizationCode,
+								redirect_at: redirectLink,
+								app_id: id,
+								profile_id: profileId,
+								expiration_date: new Date(Date.now() + 3600000).toISOString(),
+							},
+						]);
+
+					if (error) {
+						console.log("Error inserting authorization code: ", error);
+					} else {
+						const response = await fetch("/api/unauthenticate", {
+							method: "POST",
+							headers: {
+								"Content-Type": "application/json",
+							},
+						});
+
+						if (!response.ok) {
+							console.error("API call failed");
+							return;
+						}
+
+						router.push(
+							`${redirectLink}?authorizationCode=${authorizationCode}`
+						);
+					}
+				} else {
+					router.push("/home");
+				}
+			} else {
+				setRestrictPage(false);
+			}
+		};
+
+		createAuthCodeAndRedirect();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [session]);
+	}, [session, restrictPage]);
 
 	return (
 		<>
@@ -63,7 +113,6 @@ const ParticleLayout = ({
 				<title>{title ? `${title} | Face Guardian` : "Face Guardian"}</title>
 			</Head>
 			<div className="select-none">
-				{/* <Particle /> */}
 				<div className="max-w-[1440px] mx-auto">
 					{!restrictPage && children}
 				</div>
