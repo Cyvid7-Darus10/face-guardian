@@ -28,9 +28,9 @@ const ParticleLayout = ({
 		const createAuthCodeAndRedirect = async () => {
 			console.log("session", session);
 			if (session?.user?.email && restrict) {
-				const { redirect_to, id } = appData || {};
+				const { redirectTo, redirect_to, id } = appData || {};
 				if (redirect_to && id) {
-					const redirectLink = convertToLink(redirect_to);
+					const redirectUrl = convertToLink(redirect_to);
 					const authorizationCode = generateRandomString(30);
 					const profileId = session.user.id;
 
@@ -39,7 +39,7 @@ const ParticleLayout = ({
 						.insert([
 							{
 								code: authorizationCode,
-								redirect_at: redirectLink,
+								redirect_at: redirectTo,
 								app_id: id,
 								profile_id: profileId,
 								expiration_date: new Date(Date.now() + 3600000).toISOString(),
@@ -50,7 +50,7 @@ const ParticleLayout = ({
 						console.log("Error inserting authorization code: ", error);
 					} else {
 						router.push(
-							`${redirectLink}?authorizationCode=${authorizationCode}`
+							`${redirectTo}?authorizationCode=${authorizationCode}&redirectUrl=${redirectUrl}`
 						);
 					}
 				} else {

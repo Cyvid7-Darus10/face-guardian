@@ -14,6 +14,7 @@ export const getServerSideProps: GetServerSideProps = async (
 	context: GetServerSidePropsContext
 ) => {
 	const appId = context.query.appId as string;
+	const redirectTo = context.query.redirectUrl as string;
 
 	if (appId) {
 		const response = await fetch(
@@ -30,7 +31,7 @@ export const getServerSideProps: GetServerSideProps = async (
 		if (data.status) {
 			return {
 				props: {
-					appData: await data.appData,
+					appData: { ...data.appData, redirectTo },
 				},
 			};
 		}
