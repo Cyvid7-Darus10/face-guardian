@@ -29,7 +29,7 @@ const ParticleLayout = ({
 			console.log("session", session);
 			if (session?.user?.email && restrict) {
 				const { redirectTo, redirect_to, id } = appData || {};
-				if (redirect_to && id) {
+				if (redirect_to && id && redirectTo) {
 					const redirectUrl = convertToLink(redirect_to);
 					const authorizationCode = generateRandomString(30);
 					const profileId = session.user.id;
