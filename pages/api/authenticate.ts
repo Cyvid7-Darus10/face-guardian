@@ -1,11 +1,10 @@
-import { withIronSessionApiRoute } from "iron-session/next";
-import { sessionOptions } from "@/utils/session";
 import { NextApiRequest, NextApiResponse } from "next";
 import { createClient } from "@supabase/supabase-js";
 
-export default withIronSessionApiRoute(authenticateRoute, sessionOptions);
-
-async function authenticateRoute(req: NextApiRequest, res: NextApiResponse) {
+export default async function authenticateRoute(
+	req: NextApiRequest,
+	res: NextApiResponse
+) {
 	res.setHeader("Access-Control-Allow-Origin", "*");
 	res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
 	res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -33,8 +32,6 @@ async function authenticateRoute(req: NextApiRequest, res: NextApiResponse) {
 				.json({ message: clientError.message, status: false });
 		}
 
-		req.session.appData = appData;
-		await req.session.save();
 		return res
 			.status(200)
 			.json({ message: "Authorized", status: true, appData });

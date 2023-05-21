@@ -26,6 +26,7 @@ const ParticleLayout = ({
 
 	useEffect(() => {
 		const createAuthCodeAndRedirect = async () => {
+			console.log("session", session);
 			if (session?.user?.email && restrict) {
 				const { redirect_to, id } = appData || {};
 				if (redirect_to && id) {
@@ -48,18 +49,6 @@ const ParticleLayout = ({
 					if (error) {
 						console.log("Error inserting authorization code: ", error);
 					} else {
-						const response = await fetch("/api/unauthenticate", {
-							method: "POST",
-							headers: {
-								"Content-Type": "application/json",
-							},
-						});
-
-						if (!response.ok) {
-							console.error("API call failed");
-							return;
-						}
-
 						router.push(
 							`${redirectLink}?authorizationCode=${authorizationCode}`
 						);

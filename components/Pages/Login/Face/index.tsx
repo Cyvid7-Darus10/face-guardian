@@ -29,13 +29,13 @@ const Face = ({ appData }: { appData?: any }) => {
 			<FaceRecognition />
 			<div className="flex w-full gap-2 text-center items-center justify-center z-50 2xl:text-lg">
 				<Link
-					href="/register"
+					href={appData ? `/register?appId=${appData?.id}` : "/register"}
 					className="cursor-pointer text-[#5f9cbf] hover:underline">
 					Register
 				</Link>
 				|
 				<Link
-					href="/login/email"
+					href={appData ? `/login/email?appId=${appData?.id}` : "/login"}
 					className="cursor-pointer text-[#5f9cbf] hover:underline">
 					Login using email?
 				</Link>
