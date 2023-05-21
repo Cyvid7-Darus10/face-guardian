@@ -6,10 +6,11 @@ import { createClient } from "@supabase/supabase-js";
 export default withIronSessionApiRoute(authenticateRoute, sessionOptions);
 
 async function authenticateRoute(req: NextApiRequest, res: NextApiResponse) {
+	res.setHeader("Access-Control-Allow-Origin", "*");
+	res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+	res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
 	if (req.method === "OPTIONS") {
-		res.setHeader("Access-Control-Allow-Origin", "*");
-		res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-		res.setHeader("Access-Control-Allow-Headers", "Content-Type");
 		res.status(200).end();
 		return;
 	}
