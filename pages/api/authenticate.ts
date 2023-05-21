@@ -6,6 +6,14 @@ import { createClient } from "@supabase/supabase-js";
 export default withIronSessionApiRoute(authenticateRoute, sessionOptions);
 
 async function authenticateRoute(req: NextApiRequest, res: NextApiResponse) {
+	if (req.method === "OPTIONS") {
+		res.setHeader("Access-Control-Allow-Origin", "*");
+		res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+		res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+		res.status(200).end();
+		return;
+	}
+
 	const { appId, clientSecret } = req.body;
 	const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 	const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
