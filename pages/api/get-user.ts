@@ -5,6 +5,15 @@ export default async function getUser(
 	req: NextApiRequest,
 	res: NextApiResponse
 ) {
+	res.setHeader("Access-Control-Allow-Origin", "*");
+	res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+	res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+	if (req.method === "OPTIONS") {
+		res.status(200).end();
+		return;
+	}
+
 	// Get the token from the request headers
 	const token = req.headers.authorization?.split(" ")[1];
 

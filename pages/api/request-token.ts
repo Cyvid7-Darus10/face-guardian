@@ -5,6 +5,15 @@ export default async function requestToken(
 	req: NextApiRequest,
 	res: NextApiResponse
 ) {
+	res.setHeader("Access-Control-Allow-Origin", "*");
+	res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+	res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+	if (req.method === "OPTIONS") {
+		res.status(200).end();
+		return;
+	}
+
 	// Get the authorization code from the request body
 	const { authorizationCode } = req.body;
 
