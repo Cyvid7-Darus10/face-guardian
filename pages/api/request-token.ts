@@ -13,14 +13,13 @@ export default async function requestToken(
 	}
 
 	const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
-	const supabaseServiceRoleKey = process.env
-		.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY as string;
-	const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+	const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
+	const supabase = createClient(supabaseUrl, supabaseKey);
 
 	try {
 		// Request a token using the authorization code
 		let { data, error } = await supabase
-			.from("authorization_codes")
+			.from("tokens")
 			.select("token")
 			.eq("code", authorizationCode)
 			.single();
