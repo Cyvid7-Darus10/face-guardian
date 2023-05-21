@@ -19,7 +19,7 @@ async function authenticateRoute(req: NextApiRequest, res: NextApiResponse) {
 			.single();
 
 		if (error) {
-			res.status(500).json({ message: error.message, status: false });
+			return res.status(500).json({ message: error.message, status: false });
 		}
 
 		if (clientData) {
@@ -31,23 +31,27 @@ async function authenticateRoute(req: NextApiRequest, res: NextApiResponse) {
 				.single();
 
 			if (clientError) {
-				res.status(500).json({ message: clientError.message, status: false });
+				return res
+					.status(500)
+					.json({ message: clientError.message, status: false });
 			}
 
 			if (clientData && appData?.client_id !== clientId) {
-				res
+				return res
 					.status(401)
 					.json({ message: "Unauthorized. Invalid client id.", status: false });
 			} else {
 				req.session.clientData = clientData;
 				req.session.appData = appData;
 				await req.session.save();
-				res.status(200).json({ message: "Authorized", status: true });
+				return res.status(200).json({ message: "Authorized", status: true });
 			}
 		} else {
-			res.status(401).json({ message: "Unauthorized. Invalid client secret." });
+			return res
+				.status(401)
+				.json({ message: "Unauthorized. Invalid client secret." });
 		}
 	} catch (error) {
-		res.status(500).json({ message: (error as Error).message });
+		return res.status(500).json({ message: (error as Error).message });
 	}
 }
