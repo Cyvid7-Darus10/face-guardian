@@ -29,7 +29,7 @@ export default async function getUser(
 		// check if the token exists in the database
 		let { data, error } = await supabase
 			.from("tokens")
-			.select("profile_id, profiles (id, name, email)")
+			.select("profile_id, profiles (id, first_name, last_name, email)")
 			.eq("token", token)
 			.single();
 
