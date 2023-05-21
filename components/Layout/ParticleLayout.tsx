@@ -32,19 +32,19 @@ const ParticleLayout = ({
 				if (redirect_to && id && redirectTo) {
 					const redirectUrl = convertToLink(redirect_to);
 					const authorizationCode = generateRandomString(30);
+					const token = generateRandomString(128);
 					const profileId = session.user.id;
 
-					const { error } = await supabaseClient
-						.from("authorization_codes")
-						.insert([
-							{
-								code: authorizationCode,
-								redirect_at: redirectTo,
-								app_id: id,
-								profile_id: profileId,
-								expiration_date: new Date(Date.now() + 3600000).toISOString(),
-							},
-						]);
+					const { error } = await supabaseClient.from("tokens").insert([
+						{
+							code: authorizationCode,
+							token,
+							redirect_at: redirectTo,
+							app_id: id,
+							profile_id: profileId,
+							expiration_date: new Date(Date.now() + 3600000).toISOString(),
+						},
+					]);
 
 					if (error) {
 						console.log("Error inserting authorization code: ", error);
