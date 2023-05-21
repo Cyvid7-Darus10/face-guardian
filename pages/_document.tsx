@@ -35,7 +35,6 @@ export default function Document() {
 					sizes="16x16"
 					href="/favicons/favicon-16x16.png"
 				/>
-				<link rel="manifest" href="/site.webmanifest" />
 			</Head>
 			<body>
 				<Main />
