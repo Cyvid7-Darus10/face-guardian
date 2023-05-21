@@ -6,7 +6,8 @@ export const sessionOptions: IronSessionOptions = {
 	password: process.env.SECRET_COOKIE_PASSWORD as string,
 	cookieName: "supabase-auth",
 	cookieOptions: {
-		secure: false,
+		secure: process.env.NODE_ENV === "production",
+		sameSite: "none",
 	},
 };
 
