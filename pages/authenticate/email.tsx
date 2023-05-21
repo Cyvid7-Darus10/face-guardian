@@ -8,10 +8,9 @@ type Props = {
 	clientData: any;
 };
 
-const Register = ({ appData, clientData }: Props): JSX.Element => {
-	console.log(appData, clientData, "KEYS");
+const Register = ({ appData }: Props): JSX.Element => {
 	return (
-		<ParticleLayout title="Login" restrict={true}>
+		<ParticleLayout title="Login" restrict={true} appData={appData}>
 			<InputDetails />
 		</ParticleLayout>
 	);
@@ -19,8 +18,8 @@ const Register = ({ appData, clientData }: Props): JSX.Element => {
 
 export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
 	const appData = req.session.appData || null;
-	const clientData = req.session.clientData || null;
-	if (!appData || !clientData) {
+
+	if (!appData) {
 		return {
 			redirect: {
 				permanent: false,
@@ -32,7 +31,6 @@ export const getServerSideProps = withIronSessionSsr(async function ({ req }) {
 	return {
 		props: {
 			appData,
-			clientData,
 		},
 	};
 }, sessionOptions);

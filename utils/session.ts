@@ -16,6 +16,5 @@ declare module "iron-session" {
 	interface IronSessionData {
 		user?: User;
 		appData?: any;
-		clientData?: any;
 	}
 }

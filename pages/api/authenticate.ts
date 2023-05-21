@@ -15,51 +15,29 @@ async function authenticateRoute(req: NextApiRequest, res: NextApiResponse) {
 		return;
 	}
 
-	const { appId, clientSecret } = req.body;
+	const { appId } = req.body;
 	const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
 	const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 	const supabase = createClient(supabaseUrl, supabaseKey);
 
 	try {
-		let { data: clientData, error } = await supabase
-			.from("clients")
+		let { data: appData, error: clientError } = await supabase
+			.from("apps")
 			.select("*")
-			.eq("secret_key", clientSecret)
+			.eq("id", appId)
 			.single();
 
-		if (error) {
-			return res.status(500).json({ message: error.message, status: false });
-		}
-
-		if (clientData) {
-			const clientId = clientData.id;
-			let { data: appData, error: clientError } = await supabase
-				.from("apps")
-				.select("*")
-				.eq("id", appId)
-				.single();
-
-			if (clientError) {
-				return res
-					.status(500)
-					.json({ message: clientError.message, status: false });
-			}
-
-			if (clientData && appData?.client_id !== clientId) {
-				return res
-					.status(401)
-					.json({ message: "Unauthorized. Invalid client id.", status: false });
-			} else {
-				req.session.clientData = clientData;
-				req.session.appData = appData;
-				await req.session.save();
-				return res.status(200).json({ message: "Authorized", status: true });
-			}
-		} else {
+		if (clientError) {
 			return res
-				.status(401)
-				.json({ message: "Unauthorized. Invalid client secret." });
+				.status(500)
+				.json({ message: clientError.message, status: false });
 		}
+
+		req.session.appData = appData;
+		await req.session.save();
+		return res
+			.status(200)
+			.json({ message: "Authorized", status: true, appData });
 	} catch (error) {
 		return res.status(500).json({ message: (error as Error).message });
 	}
