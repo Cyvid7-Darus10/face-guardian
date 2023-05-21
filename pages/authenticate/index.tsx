@@ -8,7 +8,7 @@ import type {
 
 const Authenticate = ({ appData }: { appData?: string }): JSX.Element => {
 	return (
-		<ParticleLayout title="Authenticate" restrict={true}>
+		<ParticleLayout title="Authenticate" restrict={true} appData={appData}>
 			<Face appData={appData} />
 		</ParticleLayout>
 	);
