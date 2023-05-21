@@ -13,9 +13,8 @@ export default async function getUser(
 	}
 
 	const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
-	const supabaseServiceRoleKey = process.env
-		.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY as string;
-	const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
+	const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
+	const supabase = createClient(supabaseUrl, supabaseKey);
 
 	try {
 		// check if the token exists in the database
