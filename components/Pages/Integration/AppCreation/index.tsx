@@ -71,7 +71,7 @@ const AppCreation = ({ setAppList }: { setAppList: any }) => {
 								className="rounded-sm w-full py-2 px-4 mt-2 h-[48px] border-b-2 bg-slate-50"
 								id="domain"
 								type="text"
-								{...register("domain", { required: true, maxLength: 150 })}
+								{...register("domain", { required: true, maxLength: 600 })}
 							/>
 							{errors.domain && (
 								<span className="text-red-400">Domain field is required</span>
@@ -83,7 +83,7 @@ const AppCreation = ({ setAppList }: { setAppList: any }) => {
 								className="rounded-sm w-full py-2 px-4 mt-2 h-[48px] border-b-2 bg-slate-50"
 								id="redirectTo"
 								type="text"
-								{...register("redirectTo", { required: true, maxLength: 150 })}
+								{...register("redirectTo", { required: true, maxLength: 600 })}
 							/>
 							{errors.redirectTo && (
 								<span className="text-red-400">
