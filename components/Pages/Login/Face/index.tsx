@@ -35,7 +35,7 @@ const Face = ({ appData }: { appData?: any }) => {
 				</Link>
 				|
 				<Link
-					href={appData ? `/login/email?appId=${appData?.id}` : "/login"}
+					href={appData ? `/login/email?appId=${appData?.id}` : "/login/email"}
 					className="cursor-pointer text-[#5f9cbf] hover:underline">
 					Login using email?
 				</Link>

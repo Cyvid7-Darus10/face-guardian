@@ -31,7 +31,7 @@ const Face = ({
 				</Link>
 				|
 				<Link
-					href="/login"
+					href="/login/email"
 					className="cursor-pointer text-[#5f9cbf] hover:underline">
 					Login using email?
 				</Link>
