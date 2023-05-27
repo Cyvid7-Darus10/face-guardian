@@ -26,7 +26,7 @@ const Sidebar = ({
 					onClick={() => handleSelectApp(app)}
 					variant="contained"
 					className={`hover:bg-[#ddf3ff] hover:text-[#5f9cbf] w-full px-5 truncate ${
-						selectedApp.id === app.id
+						selectedApp?.id === app?.id
 							? "bg-[#ddf3ff] text-[#5f9cbf]"
 							: "bg-[#accfe1] text-[#2c566f]"
 					}`}>
