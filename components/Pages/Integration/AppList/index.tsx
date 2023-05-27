@@ -16,7 +16,7 @@ const AppList = () => {
 			const { data, error } = await supabaseClient
 				.from("apps")
 				.select("*")
-				.eq("client_id", userData?.id);
+				.eq("profile_id", userData?.id);
 
 			if (error) {
 				toast.error("Error fetching apps");

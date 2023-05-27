@@ -50,35 +50,6 @@ const insertFingerprint = async (
 	}
 };
 
-type ClientData = {
-	user: {
-		id: string;
-	};
-};
-
-const insertClientDetails = async (data: ClientData, supabaseClient: any) => {
-	const randomString = generateRandomString(128);
-	const secretKey = encryptSecretKey(
-		randomString,
-		process.env.NEXT_PUBLIC_ENCRYPTION_KEY as string
-	);
-
-	const { error } = await supabaseClient.from("clients").insert([
-		{
-			id: data?.user?.id,
-			secret_key: secretKey,
-		},
-	]);
-
-	if (error) {
-		toast(error.message, {
-			type: "error",
-			autoClose: 2000,
-		});
-		return;
-	}
-};
-
 const checkInputFields = (userData: any) => {
 	if (!isEmail(userData.email)) {
 		toast("Please enter a valid email", {
@@ -149,7 +120,6 @@ const registerUser = async (
 		Promise.all([
 			insertFaceDescriptors(data, faceDescriptors, supabaseClient),
 			insertFingerprint(data, supabaseClient, fpPromise),
-			insertClientDetails(data, supabaseClient),
 		]);
 
 		toast(

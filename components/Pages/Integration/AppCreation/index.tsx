@@ -27,7 +27,7 @@ const AppCreation = ({ setAppList }: { setAppList: any }) => {
 			name: appData.name,
 			domain: appData.domain,
 			redirect_to: appData.redirectTo,
-			client_id: userData.id,
+			profile_id: userData.id,
 		};
 
 		const { data, error } = await supabaseClient

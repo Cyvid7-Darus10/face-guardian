@@ -29,7 +29,7 @@ const HomeLayout = ({
 		const getUserData = async () => {
 			const { data, error } = await supabaseClient
 				.from("profiles")
-				.select("*, clients(secret_key)")
+				.select("*")
 				.eq("id", session?.user?.id as string)
 				.single();
 
