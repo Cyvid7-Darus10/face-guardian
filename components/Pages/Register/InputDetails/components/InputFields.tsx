@@ -9,6 +9,8 @@ import PasswordBar from "./PasswordBar";
 const InputFields = ({
 	userData,
 	setUserData,
+	passDetails,
+	setPassDetails,
 }: {
 	userData: {
 		firstName: string;
@@ -17,13 +19,12 @@ const InputFields = ({
 		password: string;
 	};
 	setUserData: (arg: any) => void;
+	passDetails: { id: number; value: string };
+	setPassDetails: (arg: any) => void;
 }) => {
-	const [passDetails, setPassDetails] = useState({ id: 0, value: "Too weak" });
-
 	const setPassword = (password: string) => {
 		const strength = passwordStrength(password);
 		setPassDetails({ id: strength.id, value: strength.value });
-
 		setUserData({ ...userData, password });
 	};
 

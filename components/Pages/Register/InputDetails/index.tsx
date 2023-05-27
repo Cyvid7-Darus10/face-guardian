@@ -8,6 +8,7 @@ import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 const InputDetails = ({ faceDescriptors }: { faceDescriptors: any }) => {
+	const [passDetails, setPassDetails] = useState({ id: 0, value: "Too weak" });
 	const supabaseClient = useSupabaseClient();
 	const fpPromise = FingerprintJS.load();
 	const [loading, setLoading] = useState(false);
@@ -40,7 +41,12 @@ const InputDetails = ({ faceDescriptors }: { faceDescriptors: any }) => {
 				className="z-50 max-w-[250px] lg:w-1/3 lg:max-w-full"
 			/>
 			<div className="flex flex-col gap-5 w-full lg:w-1/2 p-5 lg:p-10 z-50">
-				<InputFields userData={userData} setUserData={setUserData} />
+				<InputFields
+					userData={userData}
+					setUserData={setUserData}
+					passDetails={passDetails}
+					setPassDetails={setPassDetails}
+				/>
 				<HCaptcha
 					ref={captchaRef}
 					sitekey={siteKey}
@@ -52,7 +58,7 @@ const InputDetails = ({ faceDescriptors }: { faceDescriptors: any }) => {
 					onClick={onSubmit}
 					variant="contained"
 					color="primary"
-					disabled={loading}
+					disabled={loading || passDetails?.value === "Too weak"}
 					className="bg-[#5f9cbf] hover:bg-[#ddf3ff] hover:text-[#5f9cbf] w-full ">
 					Create account
 				</Button>
