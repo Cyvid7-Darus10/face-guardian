@@ -115,6 +115,7 @@ const ParticleLayout = ({
 					{showVerification && (
 						<div className="z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
 							<ConfirmationModal
+								open={showVerification}
 								title="Allow Application"
 								onConfirm={() => setVerified(true)}>
 								Are you sure you want to allow {appData?.domain} to access your
