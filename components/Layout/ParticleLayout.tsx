@@ -6,6 +6,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { generateRandomString } from "@/utils/encryption";
 import { convertToLink } from "@/utils/convertToLink";
 import Particles from "../Common/Particles";
+import ConfirmationModal from "@/components/Atom/ConfirmationModal";
 
 interface ParticleLayoutProps {
 	children: ReactNode;
@@ -24,35 +25,40 @@ const ParticleLayout = ({
 	const [restrictPage, setRestrictPage] = useState(true);
 	const router = useRouter();
 	const supabaseClient = useSupabaseClient();
+	const [showVerification, setShowVerification] = useState(false);
+	const [verified, setVerified] = useState(false);
 
 	useEffect(() => {
 		const createAuthCodeAndRedirect = async () => {
-			console.log("session", session);
 			if (session?.user?.email && restrict) {
-				const { redirectTo, redirect_to, id } = appData || {};
-				if (redirect_to && id && redirectTo) {
-					const redirectUrl = convertToLink(redirect_to);
-					const authorizationCode = generateRandomString(30);
-					const token = generateRandomString(128);
-					const profileId = session.user.id;
+				if (verified) {
+					const { redirectTo, redirect_to, id } = appData || {};
+					if (redirect_to && id && redirectTo) {
+						const redirectUrl = convertToLink(redirect_to);
+						const authorizationCode = generateRandomString(30);
+						const token = generateRandomString(128);
+						const profileId = session.user.id;
 
-					const { error } = await supabaseClient.from("tokens").insert([
-						{
-							code: authorizationCode,
-							token,
-							redirect_at: redirectTo,
-							app_id: id,
-							profile_id: profileId,
-							expiration_date: new Date(Date.now() + 3600000).toISOString(),
-						},
-					]);
+						const { error } = await supabaseClient.from("tokens").insert([
+							{
+								code: authorizationCode,
+								token,
+								redirect_at: redirectTo,
+								app_id: id,
+								profile_id: profileId,
+								expiration_date: new Date(Date.now() + 3600000).toISOString(),
+							},
+						]);
 
-					if (error) {
-						console.log("Error inserting authorization code: ", error);
+						if (error) {
+							console.log("Error inserting authorization code: ", error);
+						} else {
+							router.push(
+								`${redirectTo}?authorizationCode=${authorizationCode}&redirectUrl=${redirectUrl}`
+							);
+						}
 					} else {
-						router.push(
-							`${redirectTo}?authorizationCode=${authorizationCode}&redirectUrl=${redirectUrl}`
-						);
+						setShowVerification(true);
 					}
 				} else {
 					router.push("/home");
@@ -64,7 +70,7 @@ const ParticleLayout = ({
 
 		createAuthCodeAndRedirect();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [session, restrictPage]);
+	}, [session, restrictPage, verified]);
 
 	return (
 		<>
@@ -106,6 +112,16 @@ const ParticleLayout = ({
 				<Particles />
 				<div className="max-w-[1440px] mx-auto">
 					{!restrictPage && children}
+					{showVerification && (
+						<div className="z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+							<ConfirmationModal
+								title="Allow Application"
+								onConfirm={() => setVerified(true)}>
+								Are you sure you want to allow {appData?.domain} to access your
+								email and name?
+							</ConfirmationModal>
+						</div>
+					)}
 				</div>
 			</div>
 		</>

@@ -28,7 +28,7 @@ export default function ConfirmationModal({
 				type="button"
 				onClick={openModal}
 				className="mt-5 w-full inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">
-				Delete
+				{title}
 			</button>
 
 			<Transition appear show={isOpen} as={Fragment}>
