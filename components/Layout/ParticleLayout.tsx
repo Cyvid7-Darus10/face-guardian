@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { generateRandomString } from "@/utils/encryption";
 import { convertToLink } from "@/utils/convertToLink";
+import Particles from "../Common/Particles";
 
 interface ParticleLayoutProps {
 	children: ReactNode;
@@ -102,6 +103,7 @@ const ParticleLayout = ({
 				<title>{title ? `${title} | Face Guardian` : "Face Guardian"}</title>
 			</Head>
 			<div className="select-none">
+				<Particles />
 				<div className="max-w-[1440px] mx-auto">
 					{!restrictPage && children}
 				</div>

@@ -58,7 +58,7 @@ const InputDetails = ({ faceDescriptors }: { faceDescriptors: any }) => {
 					onClick={onSubmit}
 					variant="contained"
 					color="primary"
-					disabled={loading || passDetails?.value === "Too weak"}
+					disabled={loading || passDetails?.value === "Strong" ? false : true}
 					className="bg-[#5f9cbf] hover:bg-[#ddf3ff] hover:text-[#5f9cbf] w-full ">
 					Create account
 				</Button>
