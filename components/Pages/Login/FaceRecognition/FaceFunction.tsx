@@ -29,10 +29,12 @@ const FaceFunction = () => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			await loadModels();
-			const data = await faceData(supabaseClient);
-			const faceMatcher = await createMatcher(data);
-			setFaceMatcher(faceMatcher);
+			if (!captchaToken) {
+				await loadModels();
+				const data = await faceData(supabaseClient);
+				const faceMatcher = await createMatcher(data);
+				setFaceMatcher(faceMatcher);
+			}
 			if (captchaToken) await capture(faceMatcher);
 		};
 		fetchData();
@@ -83,34 +85,36 @@ const FaceFunction = () => {
 					});
 				}
 
-				const screenShot = webcamRef.current.getScreenshot();
-				if (screenShot) {
-					const result = await detectFace(screenShot);
-					if (result.length > 1) {
-						toast("Multiple faces detected", {
-							type: "error",
-							autoClose: 2000,
-						});
-					} else if (result.length === 1) {
-						const fullDesc = await getFullFaceDescription(screenShot);
-						const isUserSmiling =
-							fullDesc && fullDesc[0] && isSmiling(fullDesc[0]);
-
-						if (isUserSmiling && !isSmilingPrevious) {
-							isSmilingPrevious = true;
-							smileCount++;
-							toast(`Smile detected! (${smileCount}/1)`, {
-								type: "success",
+				if (isCameraReady) {
+					const screenShot = webcamRef.current.getScreenshot();
+					if (screenShot) {
+						const result = await detectFace(screenShot);
+						if (result.length > 1) {
+							toast("Multiple faces detected", {
+								type: "error",
 								autoClose: 2000,
 							});
-						} else if (!isUserSmiling) {
-							isSmilingPrevious = false;
-						}
+						} else if (result.length === 1) {
+							const fullDesc = await getFullFaceDescription(screenShot);
+							const isUserSmiling =
+								fullDesc && fullDesc[0] && isSmiling(fullDesc[0]);
 
-						if (smileCount === 1) {
-							setImageURL(screenShot);
-							handleImage(fullDesc, fMatcher);
-							break; // exit the loop if 3 smiles are detected
+							if (isUserSmiling && !isSmilingPrevious) {
+								isSmilingPrevious = true;
+								smileCount++;
+								toast(`Smile detected! (${smileCount}/1)`, {
+									type: "success",
+									autoClose: 2000,
+								});
+							} else if (!isUserSmiling) {
+								isSmilingPrevious = false;
+							}
+
+							if (smileCount === 1) {
+								setImageURL(screenShot);
+								handleImage(fullDesc, fMatcher);
+								break; // exit the loop if 3 smiles are detected
+							}
 						}
 					}
 				}
