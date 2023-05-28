@@ -94,7 +94,7 @@ const AppDetails = ({
 			className="w-full border-l pl-4 h-full">
 			<div className="flex flex-col text-[16px] font-[400] gap-5">
 				<div className="text-left w-full">
-					<label htmlFor="firstName">Name</label>
+					<label htmlFor="firstName">App ID</label>
 					<HiddenInput content={selectedApp?.id} />
 				</div>
 				<div className="text-left w-full">
