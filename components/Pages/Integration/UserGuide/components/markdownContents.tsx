@@ -19,20 +19,21 @@ Add \`FaceLogin\` to your component:
 \`\`\`js
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { useFaceRecognition } from 'face-guardian';
+import { FaceLogin, useUserData } from 'face-guardian';
 
 const App = () => {
-    const { FaceLogin, message, user } = useFaceRecognition();
+  const userData = useUserData();
 
-    return (
+  return (
     <React.StrictMode>
-        <div>
-        <h2>Face Guardian</h2>
-        <FaceLogin />
-        <p>Message: {message}</p>
-        </div>
+      <FaceLogin
+        appId="your-app-id"
+        buttonStyles={{ background: 'red', fontSize: '20px' }}
+        buttonText="Custom Button Text"
+      />
+      {userData && <div>Welcome, {userData.name}!</div>}
     </React.StrictMode>
-    );
+  );
 };
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
