@@ -31,9 +31,9 @@ const ParticleLayout = ({
 	useEffect(() => {
 		const createAuthCodeAndRedirect = async () => {
 			if (session?.user?.email && restrict) {
-				if (verified) {
-					const { redirectTo, redirect_to, id } = appData || {};
-					if (redirect_to && id && redirectTo) {
+				const { redirectTo, redirect_to, id } = appData || {};
+				if (redirect_to && id && redirectTo) {
+					if (verified) {
 						const redirectUrl = convertToLink(redirect_to);
 						const authorizationCode = generateRandomString(30);
 						const token = generateRandomString(128);
