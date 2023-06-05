@@ -8,7 +8,10 @@ export default function Document() {
 				<meta name="apple-mobile-web-app-capable" content="yes" />
 				<meta name="apple-mobile-web-app-status-bar-style" content="default" />
 				<meta name="apple-mobile-web-app-title" content="Face Guardian" />
-				<meta name="description" content="Face Guardian" />
+				<meta
+					name="description"
+					content="Face Guardian - Secure, reliable facial authentication technology for your applications. Protect yourself with the power of biometrics."
+				/>
 				<meta name="format-detection" content="telephone=no" />
 				<meta name="mobile-web-app-capable" content="yes" />
 				<meta
