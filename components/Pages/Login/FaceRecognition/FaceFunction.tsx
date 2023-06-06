@@ -55,7 +55,7 @@ const FaceFunction = () => {
 			if (tempMatch[0]._label !== "unknown") {
 				const userId = tempMatch[0]._label;
 				if (userId !== previousUser)
-					toast(`Security Bypass Detected ${previousUser} != ${userId}`, {
+					toast("An attempt to login as another user is detected", {
 						type: "error",
 						autoClose: 2000,
 					});
@@ -103,10 +103,6 @@ const FaceFunction = () => {
 			if (webcamRef?.current) {
 				if (!isCameraReady && webcamRef.current.video.readyState === 4) {
 					isCameraReady = true;
-					toast("Camera is ready, please smile", {
-						type: "success",
-						autoClose: 2000,
-					});
 				}
 
 				if (isCameraReady) {
@@ -131,6 +127,10 @@ const FaceFunction = () => {
 									autoClose: 2000,
 								});
 							} else if (!isUserSmiling) {
+								toast("Camera is ready, please smile", {
+									type: "success",
+									autoClose: 2000,
+								});
 								isSmilingPrevious = false;
 								previousUser = await getUserData(fullDesc, fMatcher);
 							}
