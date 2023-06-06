@@ -98,6 +98,7 @@ const FaceFunction = () => {
 		let isSmilingPrevious = false;
 		let isCameraReady = false;
 		let previousUser = null;
+		let cameraReadyMessageShown = false;
 
 		while (true) {
 			if (webcamRef?.current) {
@@ -127,10 +128,14 @@ const FaceFunction = () => {
 									autoClose: 2000,
 								});
 							} else if (!isUserSmiling) {
-								toast("Camera is ready, please smile", {
-									type: "success",
-									autoClose: 2000,
-								});
+								if (!cameraReadyMessageShown) {
+									toast("Camera is ready, please smile", {
+										type: "success",
+										autoClose: 2000,
+									});
+									cameraReadyMessageShown = true;
+								}
+
 								isSmilingPrevious = false;
 								previousUser = await getUserData(fullDesc, fMatcher);
 							}
