@@ -29,7 +29,7 @@ export default async function requestToken(
 		// Request a token using the authorization code
 		let { data, error } = await supabase
 			.from("tokens")
-			.select("token")
+			.select("token, expiration_date, created_at")
 			.eq("code", authorizationCode)
 			.single();
 
@@ -41,6 +41,21 @@ export default async function requestToken(
 			return res
 				.status(404)
 				.json({ message: "Token not found", status: false });
+		}
+
+		// Check if the token has expired
+		const currentTimestamp = new Date().getTime();
+		const expiryTimestamp = new Date(data.token.expiration_date).getTime();
+		const issuedTimestamp = new Date(data.token.created_at).getTime();
+
+		// Calculate 1/4 of the expiration period
+		const quarterExpiryTimestamp =
+			issuedTimestamp + (expiryTimestamp - issuedTimestamp) / 4;
+
+		if (currentTimestamp > quarterExpiryTimestamp) {
+			return res
+				.status(401)
+				.json({ message: "Authorization code has expired", status: false });
 		}
 
 		return res
