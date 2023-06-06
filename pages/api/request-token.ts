@@ -45,8 +45,8 @@ export default async function requestToken(
 
 		// Check if the token has expired
 		const currentTimestamp = new Date().getTime();
-		const expiryTimestamp = new Date(data.token.expiration_date).getTime();
-		const issuedTimestamp = new Date(data.token.created_at).getTime();
+		const expiryTimestamp = new Date(data.expiration_date).getTime();
+		const issuedTimestamp = new Date(data.created_at).getTime();
 
 		// Calculate 1/4 of the expiration period
 		const quarterExpiryTimestamp =
