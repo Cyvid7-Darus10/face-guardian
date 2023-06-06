@@ -39,7 +39,6 @@ export default function Document() {
 					href="/favicons/favicon-16x16.png"
 				/>
 				<meta name="robots" content="all" />
-				<link rel="manifest" href="/site.webmanifest" />
 				<link
 					rel="mask-icon"
 					href="/icons/favicon/safari-pinned-tab.svg"

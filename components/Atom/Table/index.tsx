@@ -1,33 +1,76 @@
-import { useState } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import { useState, useEffect } from "react";
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableContainer,
+	TableHead,
+	TableRow,
+	Paper,
+} from "@mui/material";
 import Link from "next/link";
 import Modal from "../Modal";
-
-function createData(
-	name: string,
-	dateCreated: string,
-	lastAccessed: string,
-	url: string
-) {
-	return { name, dateCreated, lastAccessed, url };
-}
-
-const rows = [
-	createData("Facebook", "Jan 1, 2021", "Jan 1, 2021", "www.facebook.com"),
-	createData("Twitter", "Jan 1, 2021", "Jan 1, 2021", "www.twitter.com"),
-	createData("Instagram", "Jan 1, 2021", "Jan 1, 2021", "www.instagram.com"),
-	createData("LinkedIn", "Jan 1, 2021", "Jan 1, 2021", "www.linkedin.com"),
-	createData("Github", "Jan 1, 2021", "Jan 1, 2021", "www.github.com"),
-];
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import useUserDataStore from "@/store/userDataStore";
+import ConfirmationModal from "@/components/Atom/ConfirmationModal";
+import { toast } from "react-toastify";
 
 export default function BasicTable() {
 	const [open, setOpen] = useState(false);
+	const [websiteList, setWebsiteList] = useState<any>([]);
+	const supabaseClient = useSupabaseClient();
+	const { userData } = useUserDataStore();
+
+	useEffect(() => {
+		const fetchApps = async () => {
+			const { data, error } = await supabaseClient
+				.from("tokens")
+				.select("*, apps:app_id(*)")
+				.eq("profile_id", userData?.id)
+				.order("created_at", { ascending: false });
+
+			if (error) {
+				console.error(error);
+				return;
+			}
+
+			const uniqueApps = data?.reduce((acc, curr) => {
+				if (!acc[curr.app_id]) {
+					acc[curr.app_id] = curr;
+				}
+				return acc;
+			}, {});
+
+			const rowData = Object.values(uniqueApps || {}).map((app: any) => ({
+				appId: app.app_id,
+				name: app.apps.name,
+				lastAccessed: app.created_at,
+				url: app.apps.domain,
+			}));
+
+			setWebsiteList(rowData);
+		};
+
+		if (userData?.id) fetchApps();
+	}, [supabaseClient, userData]);
+
+	const deleteApp = async (appId: string) => {
+		const { error } = await supabaseClient
+			.from("tokens")
+			.delete()
+			.eq("app_id", appId)
+			.eq("profile_id", userData?.id);
+
+		if (error) {
+			console.error(error);
+			return;
+		} else {
+			toast.success("Successfully deleted token access to website");
+			setWebsiteList((prev: any) =>
+				prev.filter((app: any) => app.appId !== appId)
+			);
+		}
+	};
 
 	return (
 		<TableContainer component={Paper}>
@@ -35,13 +78,14 @@ export default function BasicTable() {
 				<TableHead>
 					<TableRow className="bg-[#ddf3ff] ">
 						<TableCell align="center">Website</TableCell>
-						<TableCell align="center">Date Created</TableCell>
 						<TableCell align="center">Last Accessed</TableCell>
-						<TableCell align="center">Actions</TableCell>
+						<TableCell align="center" className="w-[150px]">
+							Actions
+						</TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{rows.map((row) => (
+					{websiteList.map((row: any) => (
 						<TableRow key={row.name}>
 							<TableCell component="th" scope="row" align="center">
 								<Link
@@ -52,19 +96,26 @@ export default function BasicTable() {
 									{row.name}
 								</Link>
 							</TableCell>
-							<TableCell align="center">{row.dateCreated}</TableCell>
-							<TableCell align="center">{row.lastAccessed}</TableCell>
 							<TableCell align="center">
-								<button
-									onClick={() => {
-										setOpen(true);
-									}}
-									className="bg-red-400 text-white px-2 py-1 rounded-md">
-									Delete
-								</button>
+								{new Date(row.lastAccessed).toLocaleString()}
+							</TableCell>
+							<TableCell align="center">
+								<ConfirmationModal
+									open={open}
+									title="Delete"
+									onConfirm={() => deleteApp(row.appId)}>
+									Are you sure you want to delete token accesses to {row.name}?
+								</ConfirmationModal>
 							</TableCell>
 						</TableRow>
 					))}
+					{websiteList.length === 0 && (
+						<TableRow>
+							<TableCell align="center" colSpan={3}>
+								You have not granted any token access to any website yet.
+							</TableCell>
+						</TableRow>
+					)}
 				</TableBody>
 			</Table>
 			<Modal open={open} setOpen={setOpen} />
