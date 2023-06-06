@@ -41,7 +41,11 @@ const FaceFunction = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [captchaToken]);
 
-	const handleImage = async (descriptor: any, fMatch: any = faceMatcher) => {
+	const handleImage = async (
+		descriptor: any,
+		fMatch: any = faceMatcher,
+		previousUser: any
+	) => {
 		const temptDescriptors = descriptor.map((fd: any) => fd.descriptor);
 		if (temptDescriptors.length > 0 && fMatch) {
 			let tempMatch = await temptDescriptors.map((descriptor: any) =>
@@ -50,7 +54,12 @@ const FaceFunction = () => {
 
 			if (tempMatch[0]._label !== "unknown") {
 				const userId = tempMatch[0]._label;
-				loginUser(userId);
+				if (userId !== previousUser)
+					toast(`Security Bypass Detected ${previousUser} != ${userId}`, {
+						type: "error",
+						autoClose: 2000,
+					});
+				else loginUser(userId);
 			} else {
 				toast("User is not registered", {
 					type: "error",
@@ -65,6 +74,20 @@ const FaceFunction = () => {
 		}
 	};
 
+	const getUserData = async (descriptor: any, fMatch: any = faceMatcher) => {
+		const temptDescriptors = descriptor.map((fd: any) => fd.descriptor);
+		if (temptDescriptors.length > 0 && fMatch) {
+			let tempMatch = await temptDescriptors.map((descriptor: any) =>
+				fMatch.findBestMatch(descriptor)
+			);
+
+			const userId = tempMatch[0]._label;
+			return userId;
+		}
+
+		return null;
+	};
+
 	const capture = async (fMatcher: any) => {
 		toast(captchaToken ? "Please wait..." : "Please complete the captcha", {
 			type: "info",
@@ -74,6 +97,7 @@ const FaceFunction = () => {
 		let smileCount = 0;
 		let isSmilingPrevious = false;
 		let isCameraReady = false;
+		let previousUser = null;
 
 		while (true) {
 			if (webcamRef?.current) {
@@ -108,12 +132,13 @@ const FaceFunction = () => {
 								});
 							} else if (!isUserSmiling) {
 								isSmilingPrevious = false;
+								previousUser = await getUserData(fullDesc, fMatcher);
 							}
 
 							if (smileCount === 1) {
 								setImageURL(screenShot);
-								handleImage(fullDesc, fMatcher);
-								break; // exit the loop if 3 smiles are detected
+								handleImage(fullDesc, fMatcher, previousUser);
+								break;
 							}
 						}
 					}
