@@ -42,7 +42,7 @@ export async function detectFace(blob, inputSize = 512) {
 	return detected;
 }
 
-const maxDescriptorDistance = 0.5;
+const maxDescriptorDistance = 0.4;
 export async function createMatcher(faceProfile) {
 	// Create labeled descriptors of member from profile
 	let members = Object.keys(faceProfile);
