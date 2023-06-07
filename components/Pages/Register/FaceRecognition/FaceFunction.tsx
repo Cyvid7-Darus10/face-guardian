@@ -113,7 +113,7 @@ const FaceFunction = ({ setFaceDescriptors }: { setFaceDescriptors: any }) => {
 						if (isUserSmiling && !isSmilingPrevious) {
 							isSmilingPrevious = true;
 							smileCount++;
-							toast(`Smile detected! (${smileCount}/3)`, {
+							toast(`Smile detected! (${smileCount}/1)`, {
 								type: "success",
 								autoClose: 2000,
 							});
@@ -121,9 +121,9 @@ const FaceFunction = ({ setFaceDescriptors }: { setFaceDescriptors: any }) => {
 							isSmilingPrevious = false;
 						}
 
-						if (smileCount === 3) {
+						if (smileCount === 1) {
 							setImageURL(screenShot);
-							toast("3 smiles detected, capturing image", {
+							toast("Smile detected, capturing image", {
 								type: "success",
 								autoClose: 2000,
 							});
