@@ -91,7 +91,7 @@ const FaceFunction = ({ setFaceDescriptors }: { setFaceDescriptors: any }) => {
 			if (webcamRef?.current) {
 				if (!isCameraReady && webcamRef.current.video.readyState === 4) {
 					isCameraReady = true;
-					toast("Camera is ready, please smile 3 times", {
+					toast("Camera is ready, please smile.", {
 						type: "success",
 						autoClose: 5000,
 					});
