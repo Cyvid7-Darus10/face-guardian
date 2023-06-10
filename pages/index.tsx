@@ -9,15 +9,15 @@ const Home = () => {
 		<ParticleLayout title="Home" restrict={true}>
 			<div className="flex flex-col-reverse lg:flex-row items-center justify-center gap-10 p-4 lg:p-20 z-50 w-full h-full">
 				<div className="flex flex-col gap-5 w-full lg:w-1/2 p-5 lg:p-10 z-50">
-					<p className="text-[35px] font-extrabold w-full text-center lg:text-left">
+					<h1 className="text-[35px] font-extrabold w-full text-center lg:text-left">
 						Welcome to Face Guardian!
-					</p>
-					<p className="text-[20px] w-full text-center lg:text-left">
+					</h1>
+					<h2 className="text-[20px] w-full text-center lg:text-left">
 						Revolutionizing Online Authentication for a Safer and More
 						Convenient User Experience
-					</p>
+					</h2>
 					<BasicModal title="About">
-						<div className="leading-[25px]">
+						<h3 className="leading-[25px]">
 							A novel authentication approach that combines cutting-edge facial
 							recognition technology with the OAuth 2.0 protocol. This
 							innovative solution addresses the prevalent issue of fake accounts
@@ -26,7 +26,7 @@ const Home = () => {
 							easy to integrate across various platforms and services, providing
 							a more secure and efficient alternative to traditional
 							authentication methods.
-						</div>
+						</h3>
 					</BasicModal>
 					<BasicModal title="Features">
 						<div className="flex flex-col gap-2">
