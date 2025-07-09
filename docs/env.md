@@ -27,8 +27,8 @@ cp env.example .env.local
 # Required variables
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key_here
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_service_role_key_here
 SITE_URL=http://localhost:3000
 NODE_ENV=development
 ```
@@ -57,7 +57,7 @@ NODE_ENV=development
   - `pages/_app.tsx` - Creating browser Supabase client
   - Client-side database operations with RLS
 
-#### `SUPABASE_URL`
+#### `NEXT_PUBLIC_SUPABASE_URL`
 - **Type**: Server-side (secure)
 - **Required**: ✅ Yes
 - **Purpose**: Supabase project URL for server-side operations
@@ -68,7 +68,7 @@ NODE_ENV=development
   - `pages/api/authenticate-face.ts`
   - `pages/api/request-token.ts`
 
-#### `SUPABASE_SERVICE_ROLE_KEY`
+#### `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - **Type**: Server-side (secure)
 - **Required**: ✅ Yes
 - **Purpose**: Supabase service role key for admin operations
@@ -125,8 +125,8 @@ NODE_ENV=development
 # Development environment
 NEXT_PUBLIC_SUPABASE_URL=https://dev-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=dev_anon_key
-SUPABASE_URL=https://dev-project.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=dev_service_role_key
+NEXT_PUBLIC_SUPABASE_URL=https://dev-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=dev_service_role_key
 SITE_URL=http://localhost:3000
 NODE_ENV=development
 ```
@@ -136,8 +136,8 @@ NODE_ENV=development
 # Production environment
 NEXT_PUBLIC_SUPABASE_URL=https://prod-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=prod_anon_key
-SUPABASE_URL=https://prod-project.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=prod_service_role_key
+NEXT_PUBLIC_SUPABASE_URL=https://prod-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=prod_service_role_key
 SITE_URL=https://face-guardian.com
 NODE_ENV=production
 ```
@@ -149,7 +149,7 @@ NODE_ENV=production
 ### Common Issues
 
 #### **"Server configuration error"**
-- **Cause**: Missing `SUPABASE_URL` or `SUPABASE_SERVICE_ROLE_KEY`
+- **Cause**: Missing `NEXT_PUBLIC_SUPABASE_URL` or `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - **Solution**: Check your `.env.local` file and ensure all server-side variables are set
 
 #### **Client-side Supabase errors**
@@ -172,8 +172,8 @@ Create a simple validation script to check your environment:
 const requiredVars = [
   'NEXT_PUBLIC_SUPABASE_URL',
   'NEXT_PUBLIC_SUPABASE_ANON_KEY',
-  'SUPABASE_URL',
-  'SUPABASE_SERVICE_ROLE_KEY',
+  'NEXT_PUBLIC_SUPABASE_URL',
+  'NEXT_PUBLIC_SUPABASE_ANON_KEY',
   'SITE_URL',
   'NODE_ENV'
 ];

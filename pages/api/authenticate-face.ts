@@ -18,9 +18,9 @@ export default async function authenticateFace(
     });
   }
 
-  // Use server-side environment variables (without NEXT_PUBLIC_ prefix)
-  const supabaseUrl = process.env.SUPABASE_URL as string;
-  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY as string;
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
+  const supabaseServiceKey = process.env
+    .NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
 
   if (!supabaseUrl || !supabaseServiceKey) {
     return res.status(500).json({
