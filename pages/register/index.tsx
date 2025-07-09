@@ -1,18 +1,15 @@
-import { useState } from 'react';
-import Face from '@/components/Pages/Register/Face';
-import InputDetails from '@/components/Pages/Register/InputDetails';
 import ParticleLayout from '@/components/Layout/ParticleLayout';
+import RegisterPage from '@/components/Pages/Register';
 import type { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
-const Register = ({ appData }: { appData?: string }) => {
-  const [faceDescriptors, setFaceDescriptors] = useState(false);
+const Register = ({ appData }: { appData?: any }) => {
   return (
-    <ParticleLayout title="Register" restrict={true} appData={appData}>
-      {faceDescriptors ? (
-        <InputDetails faceDescriptors={faceDescriptors} />
-      ) : (
-        <Face setFaceDescriptors={setFaceDescriptors} />
-      )}
+    <ParticleLayout
+      title="Create Account - Face Guardian"
+      restrict={false}
+      appData={appData}
+    >
+      <RegisterPage appData={appData} />
     </ParticleLayout>
   );
 };
@@ -24,23 +21,27 @@ export const getServerSideProps: GetServerSideProps = async (
   const redirectTo = context.query.redirectUrl as string;
 
   if (appId) {
-    const response = await fetch(
-      'https://www.face-guardian.com/api/authenticate',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ appId }),
+    try {
+      const response = await fetch(
+        'https://www.face-guardian.com/api/authenticate',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ appId }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.status) {
+        return {
+          props: {
+            appData: { ...data.appData, redirectTo },
+          },
+        };
       }
-    );
-
-    const data = await response.json();
-
-    if (data.status) {
-      return {
-        props: {
-          appData: { ...data.appData, redirectTo },
-        },
-      };
+    } catch (error) {
+      console.error('Error fetching app data:', error);
     }
   }
 

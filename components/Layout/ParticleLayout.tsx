@@ -108,12 +108,12 @@ const ParticleLayout = ({
         <meta property="twitter:image" content="/fg-logo.png" />
         <title>{title ? `${title} | Face Guardian` : 'Face Guardian'}</title>
       </Head>
-      <div className="select-none">
+      <div className="relative min-h-screen">
         <Particles />
-        <div className="max-w-[1440px] mx-auto">
+        <div className="relative z-10 max-w-[1440px] mx-auto">
           {!restrictPage && children}
           {showVerification && (
-            <div className="z-50 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
               <ConfirmationModal
                 open={showVerification}
                 title="Allow Application"

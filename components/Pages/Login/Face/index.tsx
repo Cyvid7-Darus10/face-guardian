@@ -1,49 +1,53 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import FaceRecognition from '../FaceRecognition';
 
+// New design system components
+import AuthLayout from '@/components/Common/AuthLayout';
+import Button from '@/components/Atom/Button';
+import { EnvelopeIcon } from '@heroicons/react/24/outline';
+
 const Face = ({ appData }: { appData?: any }) => {
   return (
-    <div className="flex flex-col items-center gap-10 w-full lg:w-[800px] p-5 lg:p-10 z-50 mx-auto">
-      <Link className="flex flex-col items-center" href="/">
-        <Image
-          src="/fg-logo.png"
-          alt="fg-logo"
-          width={300}
-          height={300}
-          className="z-50 w-[75px] fixed bottom-5 lg:top-5 lg:left-5"
-        />
-      </Link>
-      {appData && (
-        <div className="flex flex-col items-center justify-center gap-5 p-2 shadow z-50">
-          <p className="text-center text-dark text-xl">
-            Logging to {appData.name}
-          </p>
-          <Link
-            href={appData.domain}
-            className="text-center text-[#5f9cbf] text-sm"
-          >
-            {appData.domain}
-          </Link>
-        </div>
-      )}
-      <FaceRecognition />
-      <div className="flex w-full gap-2 text-center items-center justify-center z-50 2xl:text-lg">
-        <Link
-          href={appData ? `/register?appId=${appData?.id}` : '/register'}
-          className="cursor-pointer text-[#5f9cbf] hover:underline"
-        >
-          Register
-        </Link>
-        |
+    <AuthLayout
+      title="Face Guardian"
+      subtitle="Secure face authentication"
+      appData={appData}
+    >
+      {/* Face Recognition Component */}
+      <div className="mb-8">
+        <FaceRecognition />
+      </div>
+
+      {/* Action Links */}
+      <div className="space-y-4">
+        {/* Email Login Alternative */}
         <Link
           href={appData ? `/login/email?appId=${appData?.id}` : '/login/email'}
-          className="cursor-pointer text-[#5f9cbf] hover:underline"
         >
-          Login using email?
+          <Button
+            variant="outline"
+            fullWidth
+            className="flex items-center justify-center"
+          >
+            <EnvelopeIcon className="w-5 h-5 mr-2" />
+            Use Email Instead
+          </Button>
         </Link>
+
+        {/* Register Link */}
+        <div className="text-center">
+          <p className="text-sm text-gray-600">
+            Don&apos;t have an account?{' '}
+            <Link
+              href={appData ? `/register?appId=${appData?.id}` : '/register'}
+              className="text-primary-600 hover:text-primary-800 font-medium"
+            >
+              Create Account
+            </Link>
+          </p>
+        </div>
       </div>
-    </div>
+    </AuthLayout>
   );
 };
 
