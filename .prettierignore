@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+.next/
+out/
+
+# Generated files
+.next/
+dist/
+build/
+
+# Database files
+*.db
+*.sqlite
+
+# Lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Config files that shouldn't be formatted
+.env*
+.gitignore
+.prettierignore
+LICENSE
+*.md
+*.txt
+*.log
+
+# Public assets
+public/
+*.png
+*.jpg
+*.gif
+*.svg
+*.ico
+*.webp
+
+# Prisma schema
+prisma/schema.prisma 
