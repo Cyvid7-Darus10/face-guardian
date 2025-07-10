@@ -16,34 +16,78 @@ const HomeLayout = ({
 }) => {
   const session = useSession();
   const [restrictPage, setRestrictPage] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const { setUserData } = useUserDataStore();
   const supabaseClient = useSupabaseClient();
 
   useEffect(() => {
-    if (session?.user?.email && restrict) {
+    // Give some time for session to be established
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    console.log('HomeLayout session check:', {
+      session: !!session,
+      email: session?.user?.email,
+      restrict,
+      isLoading,
+    });
+
+    if (session?.user?.email && restrict && !isLoading) {
+      setRestrictPage(false);
+    } else if (restrict && !isLoading) {
+      setRestrictPage(true);
+    } else {
       setRestrictPage(false);
     }
-  }, [session, restrict]);
+  }, [session, restrict, isLoading]);
 
   useEffect(() => {
     const getUserData = async () => {
-      const { data, error } = await supabaseClient
-        .from('profiles')
-        .select('*')
-        .eq('id', session?.user?.id as string)
-        .single();
+      if (session?.user?.id) {
+        try {
+          const { data, error } = await supabaseClient
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single();
 
-      if (error) {
-        console.error(error);
-        return;
-      } else if (data) {
-        setUserData(data);
+          if (error) {
+            console.error('Error fetching user data:', error);
+            return;
+          } else if (data) {
+            setUserData(data);
+          }
+        } catch (error) {
+          console.error('Unexpected error fetching user data:', error);
+        }
       }
     };
 
     getUserData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
+
+  // Show loading state while checking authentication
+  if (isLoading && restrict) {
+    return (
+      <>
+        <Head>
+          <title>{title ? `${title} | Face Guardian` : 'Face Guardian'}</title>
+        </Head>
+        <div className="h-screen flex items-center justify-center">
+          <div className="flex flex-col items-center gap-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            <span className="text-gray-600">Authenticating...</span>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>

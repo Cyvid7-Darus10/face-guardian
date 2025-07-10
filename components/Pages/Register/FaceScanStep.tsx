@@ -31,13 +31,13 @@ const FaceScanStep: React.FC<FaceScanStepProps> = ({
     onFaceDescriptors(descriptors);
     setScanStatus('success');
     setInstructions(
-      'Face scan completed successfully! You can proceed to the next step.'
+      'Face scan completed successfully! Proceeding to next step...'
     );
   };
 
   const handleStartScan = () => {
     setScanStatus('scanning');
-    setInstructions('Please look directly at the camera and remain still...');
+    setInstructions('Please look directly at the camera and smile 3 times...');
   };
 
   const handleError = () => {
@@ -108,7 +108,10 @@ const FaceScanStep: React.FC<FaceScanStepProps> = ({
 
               {(scanStatus === 'scanning' || scanStatus === 'success') && (
                 <div className="w-full h-full">
-                  <FaceRecognition setFaceDescriptors={handleFaceDescriptors} />
+                  <FaceRecognition
+                    setFaceDescriptors={handleFaceDescriptors}
+                    onNext={onNext}
+                  />
                 </div>
               )}
             </div>

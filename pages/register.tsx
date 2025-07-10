@@ -2,148 +2,32 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useApp } from '@/contexts/AppContext';
 import { useRegistration } from '@/contexts/RegistrationContext';
-import { useFaceRecognition } from '@/contexts/FaceRecognitionContext';
 import Button from '@/components/Atom/Button';
 import Input from '@/components/Atom/Input';
 import Card from '@/components/Atom/Card';
 import Image from 'next/image';
-import Webcam from 'react-webcam';
-import HCaptcha from '@hcaptcha/react-hcaptcha';
 import Link from 'next/link';
+import FaceRecognition from '@/components/Pages/Register/FaceRecognition';
 
 // Step 1: Face Scanning Component
 const FaceScanStep = () => {
-  const {
-    state: faceState,
-    webcamRef,
-    captureImage,
-    retakePhoto,
-    dispatch,
-  } = useFaceRecognition();
   const { state: regState, updateData } = useRegistration();
   const { showNotification } = useApp();
 
-  const siteKey = '20000000-ffff-ffff-ffff-000000000002';
-
-  const videoConstraints = {
-    width: 480,
-    height: 480,
-    facingMode: 'user',
-  };
-
-  const handleCapture = async () => {
-    const imageSrc = await captureImage();
-    if (imageSrc) {
-      showNotification({
-        type: 'success',
-        title: 'Face Captured',
-        message: 'Face scan completed successfully!',
-      });
-    }
-  };
-
-  const handleCaptchaVerify = (token: string) => {
-    dispatch({ type: 'SET_CAPTCHA_TOKEN', payload: token });
-    updateData({ captchaToken: token });
+  const handleFaceDescriptors = (descriptors: any) => {
+    updateData({ faceDescriptors: descriptors });
+    showNotification({
+      type: 'success',
+      title: 'Face Captured',
+      message: 'Face scan completed successfully!',
+    });
   };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
       {/* Face Scanning Area */}
       <div className="flex flex-col items-center">
-        <div className="relative w-[400px] h-[400px] bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg shadow-lg border border-blue-200 p-4">
-          {/* Loading overlay */}
-          {faceState.isProcessing && (
-            <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center rounded-lg z-50">
-              <div className="flex flex-col items-center gap-3">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                <span className="text-sm text-gray-600">Processing...</span>
-              </div>
-            </div>
-          )}
-
-          {/* Webcam View */}
-          {!faceState.imageURL && faceState.captchaToken && (
-            <>
-              <Webcam
-                audio={false}
-                height={480}
-                ref={webcamRef}
-                screenshotFormat="image/jpeg"
-                width={480}
-                videoConstraints={videoConstraints}
-                mirrored={true}
-                className="rounded-lg w-full h-full object-cover"
-              />
-              <Image
-                src="/face-guide.png"
-                width={480}
-                height={480}
-                alt="Face alignment guide"
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] opacity-60 pointer-events-none z-10"
-              />
-              <Button
-                onClick={handleCapture}
-                className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20"
-                disabled={faceState.isProcessing}
-              >
-                Capture Photo
-              </Button>
-            </>
-          )}
-
-          {/* Captured Image View */}
-          {faceState.imageURL && faceState.captchaToken && (
-            <>
-              <Image
-                src={faceState.imageURL}
-                width={480}
-                height={480}
-                alt="Captured face"
-                className="rounded-lg w-full h-full object-cover"
-              />
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={retakePhoto}
-                className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 hover:bg-white shadow-lg z-20"
-                disabled={faceState.isProcessing}
-              >
-                <svg
-                  className="w-4 h-4 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-                  />
-                </svg>
-                Retake Photo
-              </Button>
-            </>
-          )}
-        </div>
-
-        {/* Captcha */}
-        {!faceState.captchaToken && (
-          <Card className="mt-6 p-6 text-center">
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">
-              Verify to Continue
-            </h3>
-            <p className="text-sm text-gray-600 mb-4">
-              Please complete the verification below
-            </p>
-            <HCaptcha
-              sitekey={siteKey}
-              onVerify={handleCaptchaVerify}
-              theme="light"
-            />
-          </Card>
-        )}
+        <FaceRecognition setFaceDescriptors={handleFaceDescriptors} />
       </div>
 
       {/* Instructions */}
@@ -153,8 +37,8 @@ const FaceScanStep = () => {
             Face Verification
           </h2>
           <p className="text-gray-600 mb-6">
-            Please position your face within the guide and capture a clear photo
-            for secure authentication.
+            Position your face within the guide and smile naturally. The photo
+            will be captured automatically when you smile!
           </p>
         </div>
 
@@ -165,10 +49,10 @@ const FaceScanStep = () => {
             </div>
             <div>
               <h3 className="font-semibold text-gray-900">
-                Complete Verification
+                Position Your Face
               </h3>
               <p className="text-sm text-gray-600">
-                First, complete the captcha verification to enable the camera.
+                Center your face within the camera frame for optimal detection.
               </p>
             </div>
           </div>
@@ -178,11 +62,10 @@ const FaceScanStep = () => {
               <span className="text-blue-600 font-semibold">2</span>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900">
-                Position Your Face
-              </h3>
+              <h3 className="font-semibold text-gray-900">Smile Naturally</h3>
               <p className="text-sm text-gray-600">
-                Align your face with the guide overlay for best results.
+                Give us your best smile! The system will automatically detect
+                and capture it.
               </p>
             </div>
           </div>
@@ -192,33 +75,12 @@ const FaceScanStep = () => {
               <span className="text-blue-600 font-semibold">3</span>
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900">Capture Photo</h3>
+              <h3 className="font-semibold text-gray-900">Auto-Capture</h3>
               <p className="text-sm text-gray-600">
-                Click the capture button when you&apos;re ready.
+                No buttons to click! The photo captures automatically when a
+                good smile is detected.
               </p>
             </div>
-          </div>
-        </div>
-
-        {/* Status */}
-        <div className="p-4 bg-gray-50 rounded-lg">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-700">Status:</span>
-            <span
-              className={`text-sm font-medium ${
-                faceState.validationStatus === 'valid'
-                  ? 'text-green-600'
-                  : faceState.validationStatus === 'invalid'
-                    ? 'text-red-600'
-                    : 'text-gray-500'
-              }`}
-            >
-              {faceState.validationStatus === 'valid'
-                ? 'Face Verified'
-                : faceState.validationStatus === 'invalid'
-                  ? 'Verification Failed'
-                  : 'Awaiting Verification'}
-            </span>
           </div>
         </div>
 

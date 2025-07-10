@@ -5,58 +5,58 @@ import { useFaceRecognition } from '@/contexts/FaceRecognitionContext';
 import { useApp } from '@/contexts/AppContext';
 import Button from '@/components/Atom/Button';
 import { useEffect } from 'react';
+import FaceFunction from './FaceFunction';
 
 const FaceRecognition = () => {
-  const { state, webcamRef, captureImage, retakePhoto, dispatch } =
-    useFaceRecognition();
   const { showNotification } = useApp();
+  const {
+    webcamRef,
+    capture,
+    videoConstraints,
+    ReplayIcon,
+    faceMatcher,
+    captchaToken,
+    setCaptchaToken,
+    isProcessing,
+    smileDetected,
+    smileConfidence,
+    facePositioned,
+    errorMessage,
+    statusMessage,
+    setErrorMessage,
+    smilesNeeded,
+    smilesLeft,
+    smileCount,
+    lastSmileTime,
+  } = FaceFunction();
 
   const siteKey = '20000000-ffff-ffff-ffff-000000000002';
 
-  const videoConstraints = {
-    width: 480,
-    height: 480,
-    facingMode: 'user',
-  };
-
-  const handleCapture = async () => {
-    const imageSrc = await captureImage();
-    if (imageSrc) {
-      // Process face descriptors here
-      // This would integrate with face-api.js in a real implementation
-      showNotification({
-        type: 'success',
-        title: 'Face Captured',
-        message: 'Processing your face data...',
-      });
-    }
-  };
-
   const handleCaptchaVerify = (token: string) => {
-    dispatch({ type: 'SET_CAPTCHA_TOKEN', payload: token });
+    setCaptchaToken(token);
+    // Clear any previous error messages when captcha is verified
+    setErrorMessage('');
   };
-
-  useEffect(() => {
-    // Auto-capture when webcam is ready and captcha is verified
-    if (webcamRef.current && state.captchaToken && !state.imageURL) {
-      handleCapture();
-    }
-  }, [state.captchaToken, webcamRef.current]);
 
   return (
     <div className="flex flex-col items-center justify-center gap-5 w-[400px] h-[400px] bg-gradient-to-br from-blue-50 to-cyan-50 p-4 rounded-lg shadow-lg border border-blue-200 relative">
       {/* Loading overlay */}
-      {state.isProcessing && (
+      {isProcessing && (
         <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center rounded-lg z-50">
           <div className="flex flex-col items-center gap-3">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
             <span className="text-sm text-gray-600">Processing...</span>
+            {statusMessage && (
+              <span className="text-xs text-gray-500 text-center max-w-xs">
+                {statusMessage}
+              </span>
+            )}
           </div>
         </div>
       )}
 
       {/* Webcam View */}
-      {!state.imageURL && state.captchaToken && (
+      {captchaToken && (
         <>
           <Webcam
             audio={false}
@@ -75,67 +75,116 @@ const FaceRecognition = () => {
             alt="Face alignment guide"
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] opacity-60 pointer-events-none z-10"
           />
-        </>
-      )}
 
-      {/* Captured Image View */}
-      {state.imageURL && state.captchaToken && (
-        <>
-          <Image
-            src={state.imageURL}
-            width={480}
-            height={480}
-            alt="Captured face"
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[380px] h-[380px] border-4 border-blue-500 rounded-lg object-cover"
-          />
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={retakePhoto}
-            className="absolute bottom-4 bg-white/90 hover:bg-white shadow-lg z-20 flex items-center"
-            disabled={state.isProcessing}
-          >
-            <svg
-              className="w-4 h-4 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
-              />
-            </svg>
-            Retake Photo
-          </Button>
-        </>
-      )}
+          {/* Smile Detection Overlay */}
+          <div className="absolute top-2 left-2 right-2 z-20">
+            <div className="bg-white/95 backdrop-blur-sm rounded-lg p-2 shadow-lg">
+              <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center gap-1">
+                  <div
+                    className={`w-2 h-2 rounded-full ${facePositioned ? 'bg-green-500' : 'bg-red-500'}`}
+                  ></div>
+                  <span className="text-xs font-medium">
+                    {facePositioned ? 'Positioned ✓' : 'Center Face'}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div
+                    className={`w-2 h-2 rounded-full ${smileDetected ? 'bg-green-500' : 'bg-gray-400'}`}
+                  ></div>
+                  <span className="text-xs font-medium">
+                    {smileDetected ? 'Smile ✓' : 'Smile 😊'}
+                  </span>
+                </div>
+              </div>
 
-      {/* Captcha */}
-      {!state.captchaToken && (
-        <div className="flex flex-col items-center gap-4">
-          <div className="text-center">
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">
-              Verify to Continue
-            </h3>
-            <p className="text-sm text-gray-600">
-              Please complete the verification below
-            </p>
+              {/* Smile Progress */}
+              <div className="mb-2">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-xs font-medium text-blue-600">
+                    Login Progress
+                  </span>
+                  <span className="text-xs text-gray-600">
+                    {smileCount}/{smilesNeeded} smiles
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${(smileCount / smilesNeeded) * 100}%` }}
+                  ></div>
+                </div>
+              </div>
+
+              {/* Smile Confidence Bar */}
+              <div className="w-full bg-gray-200 rounded-full h-1.5 mb-1">
+                <div
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    smileConfidence > 0.7
+                      ? 'bg-green-500'
+                      : smileConfidence > 0.4
+                        ? 'bg-yellow-500'
+                        : 'bg-red-500'
+                  }`}
+                  style={{ width: `${Math.min(smileConfidence * 100, 100)}%` }}
+                ></div>
+              </div>
+
+              {/* Status */}
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-blue-600">✨ Auto-login</span>
+                {smilesLeft === 0 ? (
+                  <span className="text-green-600 font-medium animate-pulse">
+                    📸 Authenticating!
+                  </span>
+                ) : (
+                  <span className="text-gray-600">
+                    {smilesLeft} smile{smilesLeft > 1 ? 's' : ''} needed
+                  </span>
+                )}
+              </div>
+
+              {/* Error Message */}
+              {errorMessage && (
+                <div className="mt-1 text-xs text-red-600 bg-red-50 border border-red-200 rounded p-1">
+                  <div className="flex items-center gap-1">
+                    <span className="text-red-500">⚠️</span>
+                    <span>{errorMessage}</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Status Message */}
+              {statusMessage && !errorMessage && (
+                <div className="mt-1 text-xs text-blue-600 bg-blue-50 border border-blue-200 rounded p-1">
+                  <div className="flex items-center gap-1">
+                    <span className="text-blue-500">ℹ️</span>
+                    <span>{statusMessage}</span>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-          <HCaptcha
-            sitekey={siteKey}
-            onVerify={handleCaptchaVerify}
-            theme="light"
-          />
-        </div>
+        </>
       )}
 
-      {/* Error Message */}
-      {state.error && (
-        <div className="absolute bottom-4 left-4 right-4 bg-red-50 border border-red-200 rounded-lg p-3 z-20">
-          <p className="text-sm text-red-600 text-center">{state.error}</p>
+      {/* Captcha Section */}
+      {!captchaToken && (
+        <div className="absolute inset-0 bg-white/95 backdrop-blur-sm flex items-center justify-center rounded-lg z-40">
+          <div className="text-center">
+            <h3 className="text-lg font-semibold mb-4">
+              Security Verification
+            </h3>
+            <HCaptcha sitekey={siteKey} onVerify={handleCaptchaVerify} />
+            {errorMessage && (
+              <div className="mt-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded p-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-red-500">⚠️</span>
+                  <span>{errorMessage}</span>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>
