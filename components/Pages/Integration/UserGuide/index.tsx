@@ -123,41 +123,106 @@ const UserGuide = () => {
       <div>
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Installation</h2>
         <p className="text-gray-600 mb-6">
-          Choose your preferred installation method based on your project setup.
+          Get started with Face Guardian by setting up your application and
+          integrating the authentication flow.
         </p>
       </div>
 
       <div className="space-y-6">
         <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            NPM Installation
+            Step 1: Register Your Application
           </h3>
+          <div className="bg-blue-50 rounded-lg p-4 mb-4">
+            <p className="text-blue-800 text-sm">
+              First, register your application in the Face Guardian dashboard to
+              get your App ID and configure redirect URLs.
+            </p>
+          </div>
           <CodeBlock
-            code={`npm install @face-guardian/oauth-client`}
+            code={`# Navigate to Face Guardian Dashboard
+https://your-face-guardian-domain.com/integration/application
+
+# Register your application with:
+# - Application name
+# - Domain (e.g., https://yourapp.com)
+# - Redirect URL (e.g., https://yourapp.com/auth/callback)`}
             language="bash"
-            label="NPM Install"
+            label="Application Registration"
           />
         </div>
 
         <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            Yarn Installation
+            Step 2: Basic Integration
           </h3>
+          <p className="text-gray-600 mb-4">
+            Face Guardian uses OAuth 2.0 flow. You can integrate it using
+            standard OAuth libraries or implement the flow directly.
+          </p>
           <CodeBlock
-            code={`yarn add @face-guardian/oauth-client`}
-            language="bash"
-            label="Yarn Install"
-          />
-        </div>
+            code={`<!-- Simple redirect-based integration -->
+<a href="https://your-face-guardian-domain.com/authenticate?appId=YOUR_APP_ID&redirect_to=YOUR_CALLBACK_URL">
+  Login with Face Guardian
+</a>
 
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            CDN Installation
-          </h3>
-          <CodeBlock
-            code={`<script src="https://cdn.face-guardian.com/oauth-client/latest/face-guardian.min.js"></script>`}
+<!-- Or using JavaScript -->
+<script>
+function loginWithFaceGuardian() {
+  const appId = 'YOUR_APP_ID';
+  const redirectUrl = 'https://yourapp.com/auth/callback';
+  const authUrl = \`https://your-face-guardian-domain.com/authenticate?appId=\${appId}&redirect_to=\${redirectUrl}\`;
+  window.location.href = authUrl;
+}
+</script>`}
             language="html"
-            label="CDN Script"
+            label="Basic Integration"
+          />
+        </div>
+
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Step 3: Handle OAuth Callback
+          </h3>
+          <CodeBlock
+            code={`// Handle the OAuth callback in your application
+// Face Guardian will redirect to: https://yourapp.com/auth/callback?authorizationCode=xxx&redirectUrl=xxx
+
+// Example callback handler (Node.js/Express)
+app.get('/auth/callback', async (req, res) => {
+  const { authorizationCode, redirectUrl } = req.query;
+  
+  if (authorizationCode) {
+    try {
+      // Exchange authorization code for access token
+      const tokenResponse = await fetch('https://your-face-guardian-domain.com/api/request-token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ authorizationCode })
+      });
+      
+      const { accessToken } = await tokenResponse.json();
+      
+      // Get user data
+      const userResponse = await fetch('https://your-face-guardian-domain.com/api/get-user', {
+        headers: { 'Authorization': \`Bearer \${accessToken}\` }
+      });
+      
+      const userData = await userResponse.json();
+      
+      // Store user session and redirect
+      req.session.user = userData;
+      res.redirect('/dashboard');
+    } catch (error) {
+      console.error('Authentication failed:', error);
+      res.redirect('/login?error=auth_failed');
+    }
+  } else {
+    res.redirect('/login?error=no_code');
+  }
+});`}
+            language="javascript"
+            label="OAuth Callback Handler"
           />
         </div>
       </div>
@@ -175,8 +240,9 @@ const UserGuide = () => {
           </div>
           <div>
             <p className="text-sm text-yellow-800">
-              <strong>Note:</strong> Make sure your domain is registered in your
-              Face Guardian application settings before testing the integration.
+              <strong>Important:</strong> Make sure your domain is registered in
+              your Face Guardian application settings and matches exactly with
+              your redirect URLs.
             </p>
           </div>
         </div>
@@ -189,8 +255,8 @@ const UserGuide = () => {
       <div>
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Configuration</h2>
         <p className="text-gray-600 mb-6">
-          Set up your Face Guardian OAuth client with your application
-          credentials.
+          Configure your application to work with Face Guardian&apos;s OAuth 2.0
+          authentication flow.
         </p>
       </div>
 
@@ -201,10 +267,13 @@ const UserGuide = () => {
           </h3>
           <CodeBlock
             code={`# .env file
-FACE_GUARDIAN_CLIENT_ID=your_client_id_here
-FACE_GUARDIAN_CLIENT_SECRET=your_client_secret_here
-FACE_GUARDIAN_REDIRECT_URI=https://yourdomain.com/auth/callback
-FACE_GUARDIAN_SCOPE=openid profile email`}
+FACE_GUARDIAN_BASE_URL=https://your-face-guardian-domain.com
+FACE_GUARDIAN_APP_ID=your_app_id_here
+FACE_GUARDIAN_REDIRECT_URL=https://yourdomain.com/auth/callback
+
+# Optional: Session configuration
+SESSION_SECRET=your_session_secret_here
+SESSION_TIMEOUT=3600000`}
             language="env"
             label="Environment Variables"
           />
@@ -212,35 +281,51 @@ FACE_GUARDIAN_SCOPE=openid profile email`}
 
         <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            Basic Setup
+            OAuth 2.0 Flow Configuration
           </h3>
           <CodeBlock
-            code={`import { FaceGuardianClient } from '@face-guardian/oauth-client';
+            code={`// OAuth configuration object
+const faceGuardianConfig = {
+  baseUrl: process.env.FACE_GUARDIAN_BASE_URL,
+  appId: process.env.FACE_GUARDIAN_APP_ID,
+  redirectUrl: process.env.FACE_GUARDIAN_REDIRECT_URL,
+  
+  // OAuth endpoints
+  endpoints: {
+    authenticate: '/authenticate',
+    requestToken: '/api/request-token',
+    getUser: '/api/get-user',
+    validateApp: '/api/authenticate'
+  }
+};
 
-const faceGuardian = new FaceGuardianClient({
-  clientId: process.env.FACE_GUARDIAN_CLIENT_ID,
-  clientSecret: process.env.FACE_GUARDIAN_CLIENT_SECRET,
-  redirectUri: process.env.FACE_GUARDIAN_REDIRECT_URI,
-  scope: 'openid profile email'
-});`}
+// Helper function to generate auth URL
+function generateAuthUrl(appId, redirectUrl) {
+  const params = new URLSearchParams({
+    appId: appId,
+    redirect_to: redirectUrl
+  });
+  
+  return \`\${faceGuardianConfig.baseUrl}/authenticate?\${params.toString()}\`;
+}`}
             language="javascript"
-            label="Basic Setup"
+            label="OAuth Configuration"
           />
         </div>
 
         <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            Configuration Options
+            API Endpoints Reference
           </h3>
           <div className="bg-gray-50 rounded-lg p-4">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-200">
                   <th className="text-left py-2 font-medium text-gray-900">
-                    Option
+                    Endpoint
                   </th>
                   <th className="text-left py-2 font-medium text-gray-900">
-                    Type
+                    Method
                   </th>
                   <th className="text-left py-2 font-medium text-gray-900">
                     Description
@@ -249,34 +334,66 @@ const faceGuardian = new FaceGuardianClient({
               </thead>
               <tbody className="divide-y divide-gray-200">
                 <tr>
-                  <td className="py-2 font-mono text-blue-600">clientId</td>
-                  <td className="py-2 text-gray-600">string</td>
+                  <td className="py-2 font-mono text-blue-600">
+                    /authenticate
+                  </td>
+                  <td className="py-2 text-gray-600">GET</td>
                   <td className="py-2 text-gray-600">
-                    Your application&apos;s client ID
+                    Initiate OAuth flow with face authentication
                   </td>
                 </tr>
                 <tr>
-                  <td className="py-2 font-mono text-blue-600">clientSecret</td>
-                  <td className="py-2 text-gray-600">string</td>
+                  <td className="py-2 font-mono text-blue-600">
+                    /api/authenticate
+                  </td>
+                  <td className="py-2 text-gray-600">POST</td>
                   <td className="py-2 text-gray-600">
-                    Your application&apos;s client secret
+                    Validate app credentials and authorization
                   </td>
                 </tr>
                 <tr>
-                  <td className="py-2 font-mono text-blue-600">redirectUri</td>
-                  <td className="py-2 text-gray-600">string</td>
-                  <td className="py-2 text-gray-600">OAuth callback URL</td>
+                  <td className="py-2 font-mono text-blue-600">
+                    /api/request-token
+                  </td>
+                  <td className="py-2 text-gray-600">POST</td>
+                  <td className="py-2 text-gray-600">
+                    Exchange authorization code for access token
+                  </td>
                 </tr>
                 <tr>
-                  <td className="py-2 font-mono text-blue-600">scope</td>
-                  <td className="py-2 text-gray-600">string</td>
+                  <td className="py-2 font-mono text-blue-600">
+                    /api/get-user
+                  </td>
+                  <td className="py-2 text-gray-600">GET</td>
                   <td className="py-2 text-gray-600">
-                    OAuth scope permissions
+                    Get user profile data with access token
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
+        </div>
+
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            User Data Structure
+          </h3>
+          <CodeBlock
+            code={`// User data returned from /api/get-user
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "email": "user@example.com",
+  "first_name": "John",
+  "last_name": "Doe",
+  "avatar_url": "https://example.com/avatar.jpg",
+  "created_at": "2023-01-01T00:00:00Z",
+  "updated_at": "2023-01-01T00:00:00Z",
+  "email_verified": true,
+  "face_registered": true
+}`}
+            language="json"
+            label="User Data Structure"
+          />
         </div>
       </div>
     </div>
@@ -287,108 +404,289 @@ const faceGuardian = new FaceGuardianClient({
       <div>
         <h2 className="text-2xl font-bold text-gray-900 mb-4">Code Examples</h2>
         <p className="text-gray-600 mb-6">
-          Common integration patterns and usage examples.
+          Practical examples for integrating Face Guardian authentication into
+          different types of applications.
         </p>
       </div>
 
       <div className="space-y-8">
         <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            Initiate Authentication
+            Frontend Integration (HTML/JavaScript)
           </h3>
           <CodeBlock
-            code={`// Redirect user to Face Guardian login
-const authUrl = faceGuardian.getAuthorizationUrl({
-  state: 'random_state_string',
-  codeChallenge: 'your_code_challenge',
-  codeChallengeMethod: 'S256'
-});
+            code={`<!DOCTYPE html>
+<html>
+<head>
+    <title>Face Guardian Integration</title>
+</head>
+<body>
+    <div id="app">
+        <h1>My Application</h1>
+        <button onclick="loginWithFaceGuardian()">Login with Face Guardian</button>
+        <div id="user-info" style="display: none;">
+            <h2>Welcome!</h2>
+            <p>Name: <span id="user-name"></span></p>
+            <p>Email: <span id="user-email"></span></p>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
 
-// Redirect user
-window.location.href = authUrl;`}
-            language="javascript"
-            label="Initiate Auth"
+    <script>
+        const config = {
+            baseUrl: 'https://your-face-guardian-domain.com',
+            appId: 'YOUR_APP_ID',
+            redirectUrl: window.location.origin + '/auth/callback'
+        };
+
+        function loginWithFaceGuardian() {
+            const authUrl = \`\${config.baseUrl}/authenticate?appId=\${config.appId}&redirect_to=\${config.redirectUrl}\`;
+            window.location.href = authUrl;
+        }
+
+        function logout() {
+            localStorage.removeItem('faceGuardianToken');
+            document.getElementById('user-info').style.display = 'none';
+            location.reload();
+        }
+
+        // Handle OAuth callback
+        if (window.location.pathname === '/auth/callback') {
+            const urlParams = new URLSearchParams(window.location.search);
+            const authCode = urlParams.get('authorizationCode');
+            
+            if (authCode) {
+                handleAuthCallback(authCode);
+            }
+        }
+
+        async function handleAuthCallback(authCode) {
+            try {
+                // Exchange code for token
+                const tokenResponse = await fetch(\`\${config.baseUrl}/api/request-token\`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ authorizationCode: authCode })
+                });
+                
+                const { accessToken } = await tokenResponse.json();
+                localStorage.setItem('faceGuardianToken', accessToken);
+                
+                // Get user data
+                const userResponse = await fetch(\`\${config.baseUrl}/api/get-user\`, {
+                    headers: { 'Authorization': \`Bearer \${accessToken}\` }
+                });
+                
+                const userData = await userResponse.json();
+                displayUserInfo(userData);
+                
+            } catch (error) {
+                console.error('Authentication failed:', error);
+                alert('Authentication failed. Please try again.');
+            }
+        }
+
+        function displayUserInfo(user) {
+            document.getElementById('user-name').textContent = \`\${user.first_name} \${user.last_name}\`;
+            document.getElementById('user-email').textContent = user.email;
+            document.getElementById('user-info').style.display = 'block';
+        }
+    </script>
+</body>
+</html>`}
+            language="html"
+            label="Frontend Integration"
           />
         </div>
 
         <div>
           <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            Handle Callback
+            React Integration
           </h3>
           <CodeBlock
-            code={`// Handle OAuth callback
-app.get('/auth/callback', async (req, res) => {
-  const { code, state } = req.query;
-  
-  try {
-    // Exchange code for access token
-    const tokenResponse = await faceGuardian.exchangeCodeForToken(code, {
-      codeVerifier: 'your_code_verifier'
-    });
-    
-    // Get user profile
-    const userProfile = await faceGuardian.getUserProfile(tokenResponse.access_token);
-    
-    // Store user session
-    req.session.user = userProfile;
-    
-    res.redirect('/dashboard');
-  } catch (error) {
-    console.error('Authentication failed:', error);
-    res.redirect('/login?error=auth_failed');
-  }
-});`}
-            language="javascript"
-            label="Handle Callback"
-          />
-        </div>
+            code={`import React, { useState, useEffect } from 'react';
 
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            React Hook Example
-          </h3>
-          <CodeBlock
-            code={`import { useState, useEffect } from 'react';
-import { FaceGuardianClient } from '@face-guardian/oauth-client';
-
-const useFaceGuardianAuth = () => {
+const FaceGuardianAuth = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const faceGuardian = new FaceGuardianClient({
-    clientId: process.env.REACT_APP_FACE_GUARDIAN_CLIENT_ID,
-    redirectUri: window.location.origin + '/auth/callback'
-  });
-
-  const login = () => {
-    const authUrl = faceGuardian.getAuthorizationUrl();
-    window.location.href = authUrl;
-  };
-
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('face_guardian_token');
+  const config = {
+    baseUrl: 'https://your-face-guardian-domain.com',
+    appId: 'YOUR_APP_ID',
+    redirectUrl: window.location.origin + '/auth/callback'
   };
 
   useEffect(() => {
-    // Check for existing session
-    const token = localStorage.getItem('face_guardian_token');
+    // Check for existing token
+    const token = localStorage.getItem('faceGuardianToken');
     if (token) {
-      faceGuardian.getUserProfile(token)
-        .then(profile => setUser(profile))
-        .catch(() => localStorage.removeItem('face_guardian_token'))
-        .finally(() => setLoading(false));
+      fetchUserData(token);
     } else {
       setLoading(false);
     }
   }, []);
 
-  return { user, loading, login, logout };
+  const loginWithFaceGuardian = () => {
+    const authUrl = \`\${config.baseUrl}/authenticate?appId=\${config.appId}&redirect_to=\${config.redirectUrl}\`;
+    window.location.href = authUrl;
+  };
+
+  const fetchUserData = async (token) => {
+    try {
+      const response = await fetch(\`\${config.baseUrl}/api/get-user\`, {
+        headers: { 'Authorization': \`Bearer \${token}\` }
+      });
+      
+      if (response.ok) {
+        const userData = await response.json();
+        setUser(userData);
+      } else {
+        localStorage.removeItem('faceGuardianToken');
+      }
+    } catch (error) {
+      console.error('Failed to fetch user data:', error);
+      localStorage.removeItem('faceGuardianToken');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem('faceGuardianToken');
+    setUser(null);
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div>
+      {user ? (
+        <div>
+          <h2>Welcome, {user.first_name}!</h2>
+          <p>Email: {user.email}</p>
+          <button onClick={logout}>Logout</button>
+        </div>
+      ) : (
+        <div>
+          <h2>Please Login</h2>
+          <button onClick={loginWithFaceGuardian}>
+            Login with Face Guardian
+          </button>
+        </div>
+      )}
+    </div>
+  );
 };
 
-export default useFaceGuardianAuth;`}
+export default FaceGuardianAuth;`}
             language="javascript"
-            label="React Hook"
+            label="React Component"
+          />
+        </div>
+
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Node.js/Express Backend
+          </h3>
+          <CodeBlock
+            code={`const express = require('express');
+const session = require('express-session');
+const fetch = require('node-fetch');
+
+const app = express();
+app.use(express.json());
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false } // Set to true in production with HTTPS
+}));
+
+const config = {
+  baseUrl: process.env.FACE_GUARDIAN_BASE_URL,
+  appId: process.env.FACE_GUARDIAN_APP_ID,
+  redirectUrl: process.env.FACE_GUARDIAN_REDIRECT_URL
+};
+
+// Route to initiate Face Guardian authentication
+app.get('/auth/login', (req, res) => {
+  const authUrl = \`\${config.baseUrl}/authenticate?appId=\${config.appId}&redirect_to=\${config.redirectUrl}\`;
+  res.redirect(authUrl);
+});
+
+// OAuth callback handler
+app.get('/auth/callback', async (req, res) => {
+  const { authorizationCode } = req.query;
+  
+  if (!authorizationCode) {
+    return res.redirect('/login?error=no_code');
+  }
+
+  try {
+    // Exchange authorization code for access token
+    const tokenResponse = await fetch(\`\${config.baseUrl}/api/request-token\`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ authorizationCode })
+    });
+
+    if (!tokenResponse.ok) {
+      throw new Error('Failed to exchange code for token');
+    }
+
+    const { accessToken } = await tokenResponse.json();
+
+    // Get user data
+    const userResponse = await fetch(\`\${config.baseUrl}/api/get-user\`, {
+      headers: { 'Authorization': \`Bearer \${accessToken}\` }
+    });
+
+    if (!userResponse.ok) {
+      throw new Error('Failed to fetch user data');
+    }
+
+    const userData = await userResponse.json();
+
+    // Store user in session
+    req.session.user = userData;
+    req.session.accessToken = accessToken;
+
+    res.redirect('/dashboard');
+  } catch (error) {
+    console.error('Authentication failed:', error);
+    res.redirect('/login?error=auth_failed');
+  }
+});
+
+// Protected route example
+app.get('/dashboard', (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+
+  res.json({
+    message: 'Welcome to your dashboard!',
+    user: req.session.user
+  });
+});
+
+// Logout route
+app.post('/auth/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Session destruction failed:', err);
+    }
+    res.redirect('/login');
+  });
+});
+
+app.listen(3000, () => {
+  console.log('Server running on port 3000');
+});`}
+            language="javascript"
+            label="Node.js Backend"
           />
         </div>
       </div>
