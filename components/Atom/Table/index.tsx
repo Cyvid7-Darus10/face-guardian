@@ -17,6 +17,7 @@ import { toast } from 'react-toastify';
 
 export default function BasicTable() {
   const [open, setOpen] = useState(false);
+  const [selectedApp, setSelectedApp] = useState<any>(null);
   const [websiteList, setWebsiteList] = useState<any>([]);
   const supabaseClient = useSupabaseClient();
   const { userData } = useUserDataStore();
@@ -72,6 +73,24 @@ export default function BasicTable() {
     }
   };
 
+  const handleDeleteClick = (app: any) => {
+    setSelectedApp(app);
+    setOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (selectedApp) {
+      deleteApp(selectedApp.appId);
+      setOpen(false);
+      setSelectedApp(null);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setOpen(false);
+    setSelectedApp(null);
+  };
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }}>
@@ -101,13 +120,12 @@ export default function BasicTable() {
                 {new Date(row.lastAccessed).toLocaleString()}
               </TableCell>
               <TableCell align="center">
-                <ConfirmationModal
-                  open={open}
-                  title="Delete"
-                  onConfirm={() => deleteApp(row.appId)}
+                <button
+                  onClick={() => handleDeleteClick(row)}
+                  className="text-red-600 hover:text-red-800 text-sm font-medium"
                 >
-                  Are you sure you want to delete token accesses to {row.name}?
-                </ConfirmationModal>
+                  Delete
+                </button>
               </TableCell>
             </TableRow>
           ))}
@@ -120,6 +138,22 @@ export default function BasicTable() {
           )}
         </TableBody>
       </Table>
+
+      <ConfirmationModal
+        isOpen={open}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirmDelete}
+        title="Delete Access"
+        message={
+          selectedApp
+            ? `Are you sure you want to delete token access to ${selectedApp.name}?`
+            : ''
+        }
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+      />
+
       <Modal open={open} setOpen={setOpen} />
     </TableContainer>
   );

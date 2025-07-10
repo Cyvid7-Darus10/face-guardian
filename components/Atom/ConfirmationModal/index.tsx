@@ -1,99 +1,122 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
+
+interface ConfirmationModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  title: string;
+  message: string;
+  confirmText?: string;
+  cancelText?: string;
+  variant?: 'danger' | 'warning' | 'info';
+}
 
 export default function ConfirmationModal({
-  title,
-  children,
-  open = false,
+  isOpen,
+  onClose,
   onConfirm,
-}: {
-  title: string;
-  children: any;
-  open?: boolean;
-  onConfirm?: any;
-}) {
-  let [isOpen, setIsOpen] = useState(open);
+  title,
+  message,
+  confirmText = 'Confirm',
+  cancelText = 'Cancel',
+  variant = 'danger',
+}: ConfirmationModalProps) {
+  const handleConfirm = () => {
+    onConfirm();
+    onClose();
+  };
 
-  function closeModal() {
-    setIsOpen(false);
-  }
+  const variantStyles = {
+    danger: {
+      icon: 'text-red-600',
+      iconBg: 'bg-red-100',
+      confirmButton: 'bg-red-600 hover:bg-red-700 focus:ring-red-500',
+    },
+    warning: {
+      icon: 'text-yellow-600',
+      iconBg: 'bg-yellow-100',
+      confirmButton: 'bg-yellow-600 hover:bg-yellow-700 focus:ring-yellow-500',
+    },
+    info: {
+      icon: 'text-blue-600',
+      iconBg: 'bg-blue-100',
+      confirmButton: 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-500',
+    },
+  };
 
-  function openModal() {
-    setIsOpen(true);
-  }
+  const styles = variantStyles[variant];
 
   return (
-    <>
-      <button
-        type="button"
-        onClick={openModal}
-        className="mt-5 w-full inline-flex justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-      >
-        {title}
-      </button>
+    <Transition appear show={isOpen} as={Fragment}>
+      <Dialog as="div" className="relative z-50" onClose={onClose}>
+        <Transition.Child
+          as={Fragment}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div className="fixed inset-0 bg-black bg-opacity-25" />
+        </Transition.Child>
 
-      <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-[100]" onClose={closeModal}>
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0"
-            enterTo="opacity-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100"
-            leaveTo="opacity-0"
-          >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
-          </Transition.Child>
-
-          <div className="fixed inset-0 overflow-y-auto">
-            <div className="flex min-h-full items-center justify-center p-4 text-center">
-              <Transition.Child
-                as={Fragment}
-                enter="ease-out duration-300"
-                enterFrom="opacity-0 scale-95"
-                enterTo="opacity-100 scale-100"
-                leave="ease-in duration-200"
-                leaveFrom="opacity-100 scale-100"
-                leaveTo="opacity-0 scale-95"
-              >
-                <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title
-                    as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
+        <div className="fixed inset-0 overflow-y-auto">
+          <div className="flex min-h-full items-center justify-center p-4 text-center">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <div className="flex items-center gap-4">
+                  <div
+                    className={`flex-shrink-0 w-10 h-10 rounded-full ${styles.iconBg} flex items-center justify-center`}
                   >
-                    {title}
-                  </Dialog.Title>
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-500">{children}</p>
+                    <ExclamationTriangleIcon
+                      className={`w-6 h-6 ${styles.icon}`}
+                    />
                   </div>
-
-                  <div className="mt-4 flex flex-row justify-between gap-5">
-                    <button
-                      type="button"
-                      className="inline-flex w-full justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      onClick={closeModal}
+                  <div className="flex-1">
+                    <Dialog.Title
+                      as="h3"
+                      className="text-lg font-semibold leading-6 text-gray-900"
                     >
-                      Close
-                    </button>
-
-                    <button
-                      type="button"
-                      className="inline-flex w-full justify-center rounded-md border border-transparent bg-red-100 px-4 py-2 text-sm font-medium text-red-900 hover:bg-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2"
-                      onClick={() => {
-                        onConfirm();
-                        closeModal();
-                      }}
-                    >
-                      Confirm
-                    </button>
+                      {title}
+                    </Dialog.Title>
+                    <div className="mt-2">
+                      <p className="text-sm text-gray-500">{message}</p>
+                    </div>
                   </div>
-                </Dialog.Panel>
-              </Transition.Child>
-            </div>
+                </div>
+
+                <div className="mt-6 flex flex-row-reverse gap-3">
+                  <button
+                    type="button"
+                    className={`inline-flex justify-center rounded-xl px-4 py-2 text-sm font-semibold text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors ${styles.confirmButton}`}
+                    onClick={handleConfirm}
+                  >
+                    {confirmText}
+                  </button>
+                  <button
+                    type="button"
+                    className="inline-flex justify-center rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors"
+                    onClick={onClose}
+                  >
+                    {cancelText}
+                  </button>
+                </div>
+              </Dialog.Panel>
+            </Transition.Child>
           </div>
-        </Dialog>
-      </Transition>
-    </>
+        </div>
+      </Dialog>
+    </Transition>
   );
 }

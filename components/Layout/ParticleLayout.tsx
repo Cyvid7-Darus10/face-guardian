@@ -115,13 +115,12 @@ const ParticleLayout = ({
           {showVerification && (
             <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
               <ConfirmationModal
-                open={showVerification}
+                isOpen={showVerification}
+                onClose={() => setShowVerification(false)}
                 title="Allow Application"
+                message={`Are you sure you want to allow ${appData?.domain} to access your email and name?`}
                 onConfirm={() => setVerified(true)}
-              >
-                Are you sure you want to allow {appData?.domain} to access your
-                email and name?
-              </ConfirmationModal>
+              />
             </div>
           )}
         </div>

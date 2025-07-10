@@ -43,21 +43,29 @@ const RegisterPage = ({ appData }: RegisterPageProps) => {
 
   const steps = [
     {
-      id: 1,
+      id: '1',
       title: 'Face Scan',
       description: 'Secure facial recognition setup',
     },
     {
-      id: 2,
+      id: '2',
       title: 'Personal Info',
       description: 'Your account details',
     },
     {
-      id: 3,
+      id: '3',
       title: 'Verification',
       description: 'Complete registration',
     },
   ];
+
+  // Map steps to ProgressIndicator format
+  const progressSteps = steps.map((step, index) => ({
+    id: step.id,
+    title: step.title,
+    isCompleted: index + 1 < currentStep,
+    isCurrent: index + 1 === currentStep,
+  }));
 
   const handleNextStep = () => {
     if (currentStep < steps.length) {
@@ -118,11 +126,7 @@ const RegisterPage = ({ appData }: RegisterPageProps) => {
         </div>
 
         {/* Progress Indicator */}
-        <ProgressIndicator
-          steps={steps}
-          currentStep={currentStep}
-          className="mb-12"
-        />
+        <ProgressIndicator steps={progressSteps} className="mb-12" />
 
         {/* Step Content */}
         <Card shadow="xl" className="animate-fadeIn mb-8">
