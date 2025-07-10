@@ -1,69 +1,77 @@
 import React from 'react';
-import { CheckIcon } from '@heroicons/react/24/outline';
 
-interface Step {
-  id: number;
+interface ProgressStep {
+  id: string;
   title: string;
-  description?: string;
+  isCompleted?: boolean;
+  isCurrent?: boolean;
 }
 
 interface ProgressIndicatorProps {
-  steps: Step[];
-  currentStep: number;
+  steps: ProgressStep[];
   className?: string;
-  showDescriptions?: boolean;
+  orientation?: 'horizontal' | 'vertical';
 }
 
 const ProgressIndicator: React.FC<ProgressIndicatorProps> = ({
   steps,
-  currentStep,
   className = '',
-  showDescriptions = true,
+  orientation = 'vertical',
 }) => {
-  return (
-    <div className={className}>
-      <div className="flex items-center justify-between">
+  const getStepClasses = (step: ProgressStep) => {
+    if (step.isCompleted) {
+      return 'bg-green-500';
+    } else if (step.isCurrent) {
+      return 'bg-blue-500';
+    } else {
+      return 'bg-gray-300';
+    }
+  };
+
+  const getTextClasses = (step: ProgressStep) => {
+    if (step.isCompleted) {
+      return 'text-green-600';
+    } else if (step.isCurrent) {
+      return 'text-blue-600';
+    } else {
+      return 'text-gray-500';
+    }
+  };
+
+  if (orientation === 'horizontal') {
+    return (
+      <div className={`flex items-center gap-4 ${className}`}>
         {steps.map((step, index) => (
-          <div key={step.id} className="flex items-center">
-            <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-200 ${
-                currentStep >= step.id
-                  ? 'bg-primary-600 text-white'
-                  : 'bg-gray-200 text-gray-600'
-              }`}
-            >
-              {currentStep > step.id ? (
-                <CheckIcon className="w-5 h-5" />
-              ) : (
-                <span className="text-sm font-medium">{step.id}</span>
-              )}
-            </div>
-
-            {showDescriptions && (
-              <div className="ml-3">
-                <p
-                  className={`text-sm font-medium ${
-                    currentStep >= step.id ? 'text-gray-900' : 'text-gray-500'
-                  }`}
-                >
-                  {step.title}
-                </p>
-                {step.description && (
-                  <p className="text-xs text-gray-500">{step.description}</p>
-                )}
-              </div>
-            )}
-
-            {index < steps.length - 1 && (
+          <React.Fragment key={step.id}>
+            <div className="flex items-center gap-2">
               <div
-                className={`flex-1 h-0.5 mx-4 transition-colors duration-200 ${
-                  currentStep > step.id ? 'bg-primary-600' : 'bg-gray-200'
-                }`}
+                className={`w-3 h-3 rounded-full flex-shrink-0 ${getStepClasses(step)}`}
               />
+              <span className={`text-sm font-medium ${getTextClasses(step)}`}>
+                {step.title}
+              </span>
+            </div>
+            {index < steps.length - 1 && (
+              <div className="w-8 h-px bg-gray-300 flex-shrink-0" />
             )}
-          </div>
+          </React.Fragment>
         ))}
       </div>
+    );
+  }
+
+  return (
+    <div className={`space-y-2 ${className}`}>
+      {steps.map(step => (
+        <div key={step.id} className="flex items-center gap-3">
+          <div
+            className={`w-3 h-3 rounded-full flex-shrink-0 ${getStepClasses(step)}`}
+          />
+          <span className={`text-sm ${getTextClasses(step)}`}>
+            {step.title}
+          </span>
+        </div>
+      ))}
     </div>
   );
 };

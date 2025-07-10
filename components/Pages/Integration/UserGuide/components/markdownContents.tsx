@@ -31,7 +31,7 @@ const App = () => {
         buttonStyles={{ background: 'red', fontSize: '20px' }}
         buttonText="Custom Button Text"
       />
-      {userData && <div>Welcome, {userData.name}!</div>}
+      {userData && <div>Welcome, {userData.first_name}!</div>}
     </React.StrictMode>
   );
 };

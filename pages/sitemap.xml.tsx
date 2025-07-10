@@ -14,9 +14,6 @@ function generateSiteMap() {
             <loc>${EXTERNAL_DATA_URL}/home</loc>
         </url>
         <url>
-            <loc>${EXTERNAL_DATA_URL}/integration/api</loc>
-        </url>
-        <url>
             <loc>${EXTERNAL_DATA_URL}/integration/application</loc>
         </url>
         <url>

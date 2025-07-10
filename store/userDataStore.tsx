@@ -1,13 +1,12 @@
 import { create } from 'zustand';
-
-interface UserDataState {
-  userData: any;
-  setUserData: (value: any) => void;
-}
+import { UserProfile, UserDataState } from '@/types/user';
 
 const useUserDataStore = create<UserDataState>()(set => ({
   userData: null,
-  setUserData: (value: any) => set({ userData: value }),
+  isLoading: false,
+  setUserData: (value: UserProfile | null) => set({ userData: value }),
+  clearUserData: () => set({ userData: null }),
+  setLoading: (loading: boolean) => set({ isLoading: loading }),
 }));
 
 export default useUserDataStore;
