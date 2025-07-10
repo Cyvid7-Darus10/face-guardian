@@ -282,9 +282,9 @@ const RegisterPage = () => {
   const { state, nextStep, prevStep, submitRegistration } = useRegistration();
 
   const steps = [
-    { id: 1, title: 'Face Scan', component: <FaceScanStep /> },
-    { id: 2, title: 'Personal Info', component: <PersonalInfoStep /> },
-    { id: 3, title: 'Verification', component: <VerificationStep /> },
+    { id: '1', title: 'Face Scan', component: <FaceScanStep /> },
+    { id: '2', title: 'Personal Info', component: <PersonalInfoStep /> },
+    { id: '3', title: 'Verification', component: <VerificationStep /> },
   ];
 
   const handleNext = () => {
